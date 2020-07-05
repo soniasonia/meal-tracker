@@ -28,3 +28,14 @@ services:
      - POSTGRES_DB=backend
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=supersecretpassword
+
+ frontend:
+  build:
+   context: ./frontend
+  ports:
+   - "3000:3000"
+  volumes:
+   - ./frontend:/frontend
+  command: npm start
+  environment:
+   - NODE_ENV=development
