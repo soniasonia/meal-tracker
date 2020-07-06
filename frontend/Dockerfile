@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12.2.0-alpine
 MAINTAINER Sonia
 
 RUN mkdir /frontend
