@@ -14,12 +14,7 @@ class App extends React.Component {
   };
   //TODO: Diplay message in case of error network (backend unavailable)
 
-  componentDidMount = () => {
-    const isToken = localStorage.getItem("token") ? true : false;
-    if (isToken) {
-      this.verifyToken();
-    }
-  };
+  componentDidMount = () => localStorage.getItem("token") && this.verifyToken();
 
   async verifyToken() {
     try {
@@ -44,25 +39,17 @@ class App extends React.Component {
     this.setState({ page: "" });
   };
 
-  onLogoutSuccessful = () => {
-    localStorage.removeItem("token");
-    console.log("Removed token in App");
-    this.setState({ isLoggedIn: false });
-  };
-
-  logout = () => {
-
-    axios.get(APP_URL + '/api/user/logout/', {
+  async logout() {
+    try {
+      const response = await axios.get(APP_URL + "/api/user/logoutt/", {
         headers: {
           Authorization: "Token " + localStorage.getItem("token"),
         },
-      })
-    .then(response => {
-        console.log(response);
-        this.onLogoutSuccessful();
-    });
-}
-
+      });
+    } catch (error) {}
+    localStorage.removeItem("token");
+    this.setState({ isLoggedIn: false });
+  }
 
   render() {
     return (
@@ -71,9 +58,9 @@ class App extends React.Component {
           <div>
             {" "}
             <br></br>Hello, you are logged in<br></br>
-            <button onClick={this.logout} className="item">
-          Log out
-        </button>
+            <button onClick={() => this.logout()} className="item">
+              Log out
+            </button>
           </div>
         ) : (
           <div className="ui placeholder segment">
