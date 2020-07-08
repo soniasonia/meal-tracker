@@ -18,18 +18,18 @@ class PublicUserApiTests(TestCase):
         self.testTables = [
             {
                 'name': 'Test that unauthorized user cannot retrieve profile',
-                'request': (lambda url: self.client.get(url)),
+                'request': (lambda: self.client.get(ME_URL)),
                 'expected_status_code': status.HTTP_401_UNAUTHORIZED,
             },
             {
                 'name': 'Test that unauthorized user cannot POST profile',
-                'request': (lambda url: self.client.post(url, {'username': 'sebix3',
+                'request': (lambda: self.client.post(ME_URL, {'username': 'sebix3',
                                                                'password': 'test1234'})),
                 'expected_status_code': status.HTTP_401_UNAUTHORIZED,
             },
             {
                 'name': 'Test that unauthorized user cannot update profile',
-                'request': (lambda url: self.client.post(url, {'username': 'sebix3',
+                'request': (lambda: self.client.post(ME_URL, {'username': 'sebix3',
                                                                'password': 'test1234'})),
                 'expected_status_code': status.HTTP_401_UNAUTHORIZED,
             },
@@ -37,7 +37,7 @@ class PublicUserApiTests(TestCase):
 
     def test_test_tables(self):
         for i, test in enumerate(self.testTables):
-            res = test["request"](ME_URL)
+            res = test["request"]()
             try:
                 self.assertEqual(res.status_code, test["expected_status_code"])
 
@@ -56,7 +56,7 @@ class ManageUserApiTests(TestCase):
         self.testTables = [
             {
                 'name': 'Test retrieving profile for logged in user',
-                'request': (lambda url: self.client.get(url)),
+                'request': (lambda: self.client.get(ME_URL)),
                 'expected_status_code': status.HTTP_200_OK,
                 'after': (lambda res: self.assertEqual(res.data, {
                     'username': self.user.username,
@@ -65,19 +65,19 @@ class ManageUserApiTests(TestCase):
             },
             {
                 'name': 'Test updating the user profile for authenticated user"',
-                'request': (lambda url: self.client.patch(url, {'password': 'new1234'})),
+                'request': (lambda: self.client.patch(ME_URL, {'password': 'new1234'})),
                 'expected_status_code': status.HTTP_200_OK,
             },
             {
                 'name': 'Test that POST is not allowed on the me url',
-                'request': (lambda url: self.client.post(url, {})),
+                'request': (lambda: self.client.post(ME_URL, {})),
                 'expected_status_code': status.HTTP_405_METHOD_NOT_ALLOWED,
             },
         ]
 
     def test_test_tables(self):
         for i, test in enumerate(self.testTables):
-            res = test["request"](ME_URL)
+            res = test["request"]()
             try:
                 self.assertEqual(res.status_code, test["expected_status_code"])
                 try:
