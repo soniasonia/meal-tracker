@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
         password: this.state.password,
       });
       const token = response.data.token;
-      this.props.authorizeBackendToken(token);
+      this.props.loginAction(token);
       this.render();
     } catch (error) {
       if (

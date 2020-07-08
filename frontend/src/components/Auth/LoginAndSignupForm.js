@@ -3,12 +3,12 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import { APP_URL } from "../../config";
 
-const LoginAndSignupForm = ({ authorizeBackendToken }) => (
+const LoginAndSignupForm = ({ loginAction }) => (
   <div className="ui placeholder segment">
     <div className="ui two column very relaxed stackable grid">
       <div className="column">
         <h3>Login</h3>
-        <LoginForm url={APP_URL} authorizeBackendToken={authorizeBackendToken} />
+        <LoginForm url={APP_URL} loginAction={loginAction} />
       </div>
       <div className="column">
         <h3>Create new user</h3>
