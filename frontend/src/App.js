@@ -41,7 +41,7 @@ class App extends React.Component {
 
   async logout() {
     try {
-      const response = await axios.get(APP_URL + "/api/user/logoutt/", {
+      await axios.get(APP_URL + "/api/user/logoutt/", {
         headers: {
           Authorization: "Token " + localStorage.getItem("token"),
         },
@@ -80,3 +80,6 @@ class App extends React.Component {
       </div>
     );
   }
+}
+
+export default App;
