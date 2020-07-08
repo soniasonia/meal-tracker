@@ -9,6 +9,7 @@ const App = () => {
   const [authorized, setAuthorized] = useState(false);
 
   const login = async token => {
+    setBackendAuthToken(token);
     try {
       const response = await axios.get(APP_URL + "/api/user/me/", {
         headers: {
@@ -16,7 +17,6 @@ const App = () => {
         },
       });
       if (response.data && response.data.username && response.status === 200) {
-        setBackendAuthToken(token);
         setAuthorized(response.data.username);
         return;
       }
@@ -42,7 +42,12 @@ const App = () => {
 
   return (
     <div className="App">
-      {authorized ? <Dashboard user={{name: authorized}} logoutAction={logout}/> : <LoginAndSignupForm loginAction={login}/>}
+      {
+        authorized ? 
+          <Dashboard user={{name: authorized}} logoutAction={logout}/> 
+        : 
+          <LoginAndSignupForm loginAction={login}/>
+      }
     </div>
   );
 }

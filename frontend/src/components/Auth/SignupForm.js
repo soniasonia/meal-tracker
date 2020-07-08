@@ -1,115 +1,87 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import axios from "axios";
+import { errorStyle } from "./_styles"
 
-const errorStyle = {
-  backgroundColor: "#fff6f6",
-  color: "#9f3a38",
-  borderColor: "#e0b4b4",
-};
+const CreateUserForm = ({ url }) => {
+  const [ formData, setFormData ] = useState({ login: "", password: "", email: "" });
+  const [ formResponse, setFormResponse ] = useState({ created: false });
+  const [ error, setError ] = useState(false);
 
-class CreateUserForm extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    email: "",
-    errors: {},
-    created: false,
-  };
-
-  async onFormSubmit(event) {
+  const submit = async event => {
     event.preventDefault();
-    this.setState({
-      errors: {},
-    });
-
     try {
-      const response = await axios.post(this.props.url + "/api/user/create/", {
-        username: this.state.username,
-        password: this.state.password,
-        email: this.state.email,
+      await axios.post(url + "/api/user/create/", {
+        username: formData.login,
+        password: formData.password,
+        email: formData.email,
       });
-      this.setState({ created: response.data.username });
+      setFormResponse({ created: true });
     } catch (error) {
       if (
         error.response &&
         error.response.data &&
         error.response.status === 400
       ) {
-        this.setState({ errors: error.response.data });
+        setError(error.response.data)
         return;
       }
-
-      this.setState({
-        errors: { unknown: error.toString() },
-      });
+      setError({ non_field_errors: error.toString() })
     }
+    setError(false);
   }
 
-  render() {
-    return (
-      <div style={{ margin: 10 }}>
-        {this.state.created ? (
-          <div className="ui success message">
-            <div className="header">User {this.state.created} created</div>
-            <p>You may now log-in with your username and password</p>
+  return (
+    <div style={{ margin: 10 }}>
+      {formResponse.created ? (
+        <div className="ui success message">
+          <div className="header">User {formResponse.created} created</div>
+          <p>You may now log-in with your username and password</p>
+        </div>
+      ) : (
+        <form
+          onSubmit={(event) => submit(event)}
+          className="ui form"
+        >
+          <div className="field">
+            <label>Username</label>
+            <input
+              type="text"
+              value={formData.login}
+              onChange={(e) => setFormData({ ...formData, login: e.target.value })}
+            />
+            {error.username ? (
+              <div className="ui pointing basic label" style={errorStyle}>
+                {error.username}
+              </div>
+            ) : null}
           </div>
-        ) : (
-          <form
-            onSubmit={(event) => this.onFormSubmit(event)}
-            className="ui form"
-          >
-            <div className="field">
-              <label>Username</label>
-              <input
-                type="text"
-                value={this.state.username}
-                onChange={(e) => this.setState({ username: e.target.value })}
-              />
-              {this.state.errors.username ? (
-                <div className="ui pointing basic label" style={errorStyle}>
-                  {this.state.errors.username}
-                </div>
-              ) : null}
-            </div>
-            <div className="field">
-              <label>Password</label>
-              <input
-                type="password"
-                value={this.state.password}
-                onChange={(e) => this.setState({ password: e.target.value })}
-              />
-              {this.state.errors.password ? (
-                <div className="ui pointing basic label" style={errorStyle}>
-                  {this.state.errors.password}
-                </div>
-              ) : null}
-            </div>
-
-            {this.state.errors.non_field_errors ? (
-              <div className="ui negative message" style={errorStyle}>
-                {this.state.errors.non_field_errors}
+          <div className="field">
+            <label>Password</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
+            {error.password ? (
+              <div className="ui pointing basic label" style={errorStyle}>
+                {error.password}
               </div>
             ) : null}
+          </div>
 
-            {this.state.errors.unknown ? (
-              <div className="ui negative message" style={errorStyle}>
-                {this.state.errors.unknown}
-              </div>
-            ) : null}
+          {error.non_field_errors ? (
+            <div className="ui negative message" style={errorStyle}>
+              {error.non_field_errors}
+            </div>
+          ) : null}
 
-            <button type="submit" className="ui button">
-              Submit
-            </button>
-          </form>
-        )}
-      </div>
-    );
-  }
+          <button type="submit" className="ui button">
+            Submit
+          </button>
+        </form>
+      )}
+    </div>
+  );
 }
-
-CreateUserForm.propTypes = {
-  url: PropTypes.string,
-};
 
 export default CreateUserForm;

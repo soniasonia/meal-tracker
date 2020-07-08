@@ -1,99 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { errorStyle } from "./_styles"
 
-const errorStyle = {
-  backgroundColor: "#fff6f6",
-  color: "#9f3a38",
-  borderColor: "#e0b4b4",
-};
+const LoginForm = ({ url, loginAction }) => {
+  const [ formData, setFormData ] = useState({ login: "", password: "" });
+  const [ error, setError ] = useState(false);
 
-class LoginForm extends React.Component {
-  state = { login: "", password: "", errors: {} };
-
-  async onFormSubmit(event) {
+  const submit = async event => {
     event.preventDefault();
-    this.setState({
-      errors: {},
-    });
     try {
-      const response = await axios.post(this.props.url + "/api/user/login/", {
-        username: this.state.login,
-        password: this.state.password,
+      const response = await axios.post(url + "/api/user/login/", {
+        username: formData.login,
+        password: formData.password,
       });
-      const token = response.data.token;
-      this.props.loginAction(token);
-      this.render();
+      loginAction(response.data.token);
     } catch (error) {
       if (
         error.response &&
         error.response.data &&
         error.response.status === 400
       ) {
-        this.setState({ errors: error.response.data });
+        setError(error.response.data);
         return;
       }
-
-      this.setState({
-        errors: { unknown: error.toString() },
-      });
+      setError({ non_field_errors: error.toString() });
     }
+    setError(false);
   }
 
-  render() {
-    return (
-      <div style={{ margin: 10 }}>
-        <form
-          onSubmit={(event) => this.onFormSubmit(event)}
-          className="ui form"
-        >
-          <div className="field">
-            <label>Username</label>
-            <input
-              type="text"
-              value={this.state.login}
-              onChange={(e) => this.setState({ login: e.target.value })}
-            />
-
-            {this.state.errors.username ? (
-              <div className="ui pointing basic label" style={errorStyle}>
-                {this.state.errors.username}
-              </div>
-            ) : null}
-          </div>
-          <div className="field">
-            <label>Password</label>
-            <input
-              type="password"
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
-            />
-
-            {this.state.errors.password ? (
-              <div className="ui pointing basic label" style={errorStyle}>
-                {this.state.errors.password}
-              </div>
-            ) : null}
-          </div>
-
-          {this.state.errors.non_field_errors ? (
-            <div className="ui negative message" style={errorStyle}>
-              {this.state.errors.non_field_errors}
+  return (
+    <div style={{ margin: 10 }}>
+      <form
+        onSubmit={(event) => submit(event)}
+        className="ui form"
+      >
+        <div className="field">
+          <label>Username</label>
+          <input
+            type="text"
+            value={formData.login}
+            onChange={(e) => setFormData({ ...formData, login: e.target.value })}
+          />
+          {error && error.username ? (
+            <div className="ui pointing basic label" style={errorStyle}>
+              {error.username}
             </div>
           ) : null}
-
-          {this.state.errors.unknown ? (
-            <div className="ui negative message" style={errorStyle}>
-              {this.state.errors.unknown}
+        </div>
+        <div className="field">
+          <label>Password</label>
+          <input
+            type="password"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+          {error.password ? (
+            <div className="ui pointing basic label" style={errorStyle}>
+              {error.password}
             </div>
           ) : null}
+        </div>
 
-          <button type="submit" className="ui button">
-            Submit
-          </button>
-        </form>
-      </div>
-    );
-  }
+        {error.non_field_errors ? (
+          <div className="ui negative message" style={errorStyle}>
+            { error.non_field_errors }
+          </div>
+        ) : null}
+
+        <button type="submit" className="ui button">
+          Submit
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default LoginForm;
