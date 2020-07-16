@@ -1,7 +1,8 @@
 from django.db import models
+from django.conf import settings
 
 
-class Food(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(max_length=255)
     kcal = models.IntegerField()
 
@@ -9,8 +10,9 @@ class Food(models.Model):
         return self.name
 
 
-class Ingredient(models.Model):
-    food = models.ForeignKey('Food', on_delete=models.CASCADE)
+class MealIngredient(models.Model):
+    ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE)
+    meal = models.ForeignKey('Meal', on_delete=models.CASCADE)
     weight = models.IntegerField()
 
     @property
@@ -20,9 +22,14 @@ class Ingredient(models.Model):
     def __str__(self):
         return f"{self.food.name} {self.weight}g"
 
+
 class Meal(models.Model):
-    ingredients = models.ManyToManyField('Ingredient')
     date = models.DateTimeField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    ingredients = models.ManyToManyField('Ingredient', through='MealIngredient')
 
     @property
     def total_kcal(self):

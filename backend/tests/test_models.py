@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
 from meal import models
 
@@ -17,26 +17,22 @@ class ModelTests(TestCase):
 
     def setUp(self):
         self.user = create_new_user("user1")
-        self.food1 = models.Food.objects.create(name="Egg", kcal=140)
-        self.ingredient1 = models.Ingredient.objects.create(food=self.food1, weight=80)
-        self.food2 = models.Food.objects.create(name="Bacon", kcal=540)
-        self.ingredient2 = models.Ingredient.objects.create(food=self.food2, weight=50)
+
+        self.ingredient1 = models.Ingredient.objects.create(name="Egg", kcal=140)
+        self.ingredient2 = models.Ingredient.objects.create(name="Bacon", kcal=540)
+
         self.meal = models.Meal.objects.create(date=datetime.now())
-        self.meal.ingredients.add(self.ingredient1)
-        self.meal.ingredients.add(self.ingredient2)
+        self.meal.ingredients.add(self.ingredient1, throgh_defaults={'weight': 80})
+        self.meal.ingredients.add(self.ingredient2, throgh_defaults={'weight': 50})
 
         self.testTables = [
             {
-                "name": "Test food string representation",
-                "check": (lambda: self.assertEqual(str(self.food1), "Egg"))
-            },
-            {
                 "name": "Test ingredient string representation",
-                "check": (lambda: self.assertEqual(str(self.ingredient1), "Egg 80g"))
+                "check": (lambda: self.assertEqual(str(self.ingredient1), "Egg"))
             },
             {
-                "name": "Test ingredient calories calculation",
-                "check": (lambda: self.assertEqual(self.ingredient2.kcal, 50 * 540 / 100))
+                "name": "Test that ingredient belongs to meal",
+                "check": (lambda: self.assertEqual(str(self.meal.ingredients), "Egg"))
             },
             {
                 "name": "Test meal calories calculation",
