@@ -18,12 +18,13 @@ class ModelTests(TestCase):
     def setUp(self):
         self.user = create_new_user("user1")
 
-        self.ingredient1 = models.Ingredient.objects.create(name="Egg", kcal=140)
-        self.ingredient2 = models.Ingredient.objects.create(name="Bacon", kcal=540)
+        self.ingredient1 = models.Ingredient.objects.create(name="Egg", kcal_per_100g=140)
+        self.ingredient2 = models.Ingredient.objects.create(name="Bacon", kcal_per_100g=540)
+        self.ingredient3 = models.Ingredient.objects.create(name="Tomato", kcal_per_100g=40)
 
-        self.meal = models.Meal.objects.create(date=datetime.now())
-        self.meal.ingredients.add(self.ingredient1, throgh_defaults={'weight': 80})
-        self.meal.ingredients.add(self.ingredient2, throgh_defaults={'weight': 50})
+        self.meal = models.Meal.objects.create(date=datetime.now(), user=self.user)
+        self.meal.ingredients.add(self.ingredient1, through_defaults={'weight': 80})
+        self.meal.ingredients.add(self.ingredient2, through_defaults={'weight': 50})
 
         self.testTables = [
             {
@@ -31,8 +32,16 @@ class ModelTests(TestCase):
                 "check": (lambda: self.assertEqual(str(self.ingredient1), "Egg"))
             },
             {
-                "name": "Test that ingredient belongs to meal",
-                "check": (lambda: self.assertEqual(str(self.meal.ingredients), "Egg"))
+                "name": "Test that only ingredients which belong to meal are listed",
+                "check": lambda: self.assertEqual(
+                    [str(x) for x in self.meal.ingredients.all().order_by('name')],
+                    ["Bacon", "Egg"])
+            },
+            {
+                "name": "Test that ingredients for a meal can be listed with calories",
+                "check": lambda: self.assertEqual(
+                    [str(x) for x in models.MealIngredient.objects.filter(meal=self.meal).order_by('ingredient__name')],
+                    ["Bacon 50g", "Egg 80g"])
             },
             {
                 "name": "Test meal calories calculation",
@@ -47,4 +56,5 @@ class ModelTests(TestCase):
             except Exception as e:
                 print(f"Test suite {i} failed: {test['name']}")
                 raise e
+
 

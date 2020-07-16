@@ -26,13 +26,15 @@ class PublicMealApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = create_new_user("user1")
-        self.food1 = models.Ingredient.objects.create(name="Egg", kcal=140)
-        self.ingredient1 = models.MealIngredient.objects.create(food=self.food1, weight=80)
-        self.food2 = models.Ingredient.objects.create(name="Bacon", kcal=540)
-        self.ingredient2 = models.MealIngredient.objects.create(food=self.food2, weight=50)
-        self.meal = models.Meal.objects.create(date=datetime.now())
-        self.meal.ingredients.add(self.ingredient1)
-        self.meal.ingredients.add(self.ingredient2)
+
+        self.ingredient1 = models.Ingredient.objects.create(name="Egg", kcal_per_100g=140)
+        self.ingredient2 = models.Ingredient.objects.create(name="Bacon", kcal_per_100g=540)
+        self.ingredient3 = models.Ingredient.objects.create(name="Tomato", kcal_per_100g=40)
+
+        self.meal = models.Meal.objects.create(date=datetime.now(), user=self.user)
+        self.meal.ingredients.add(self.ingredient1, through_defaults={'weight': 80})
+        self.meal.ingredients.add(self.ingredient2, through_defaults={'weight': 50})
+
         self.testTables = [
             {
                 'name': 'Test that unauthorized user cannot retrieve a list of meals',

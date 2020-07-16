@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=255)
-    kcal = models.IntegerField()
+    kcal_per_100g = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -17,10 +17,10 @@ class MealIngredient(models.Model):
 
     @property
     def kcal(self):
-        return self.food.kcal * self.weight / 100
+        return self.ingredient.kcal_per_100g * self.weight / 100
 
     def __str__(self):
-        return f"{self.food.name} {self.weight}g"
+        return f"{self.ingredient.name} {self.weight}g"
 
 
 class Meal(models.Model):
@@ -33,9 +33,9 @@ class Meal(models.Model):
 
     @property
     def total_kcal(self):
-        ingredients = self.ingredients.all()
-        if len(ingredients) > 0:
-            return sum(i.kcal for i in ingredients)
+        meal_ingredients = MealIngredient.objects.filter(meal=self)
+        if len(meal_ingredients) > 0:
+            return sum(i.kcal for i in meal_ingredients)
         else:
             return 0
 

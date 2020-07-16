@@ -28,40 +28,52 @@ class PublicMealApiTests(TestCase):
         self.client = APIClient()
         self.user = create_new_user("user1")
         self.client.force_authenticate(self.user)
-        self.food1 = models.Ingredient.objects.create(name="Egg", kcal=140)
-        self.ingredient1 = models.MealIngredient.objects.create(food=self.food1, weight=80)
-        self.food2 = models.Ingredient.objects.create(name="Bacon", kcal=540)
-        self.ingredient2 = models.MealIngredient.objects.create(food=self.food2, weight=50)
-        self.meal1 = models.Meal.objects.create(date=datetime.now())
-        self.meal1.ingredients.add(self.ingredient1)
-        self.meal1.ingredients.add(self.ingredient2)
-        self.meal2 = models.Meal.objects.create(date=datetime.now())
-        self.meal2.ingredients.add(self.ingredient1)
-        self.meal_serializer = serializers.MealSerializer(
-            models.Meal.objects.all().order_by('-id'), many=True)
+
+        self.ingredient1 = models.Ingredient.objects.create(name="Egg", kcal_per_100g=140)
+        self.ingredient2 = models.Ingredient.objects.create(name="Bacon", kcal_per_100g=540)
+        self.ingredient3 = models.Ingredient.objects.create(name="Tomato", kcal_per_100g=40)
+
+        self.meal = models.Meal.objects.create(date=datetime.now(), user=self.user)
+        self.meal.ingredients.add(self.ingredient1, through_defaults={'weight': 80})
+        self.meal.ingredients.add(self.ingredient2, through_defaults={'weight': 50})
+
         self.testTables = [
             {
                 'name': 'Test that authorized user can retrieve a list of meals',
                 'request': (lambda: self.client.get(URL)),
                 'expected_status_code': status.HTTP_200_OK,
-                'expected_data': self.meal_serializer.data
+                'expected_data': serializers.MealSerializer(
+            models.Meal.objects.all().order_by('-id'), many=True).data
             },
             {
                 'name': 'Test that authorized user can retrieve a specific meal',
                 'request': (lambda: self.client.get(detail_url(self.meal.id))),
-                'expected_status_code': status.HTTP_401_UNAUTHORIZED,
+                'expected_status_code': status.HTTP_200_OK,
+                'expected_data': serializers.MealSerializer(self.meal).data
+            },
+            {
+                'name': 'Test that authorized user can add a new ingredient',
+                'request': (lambda: self.client.post(URL, {})),
+                'expected_status_code': status.HTTP_200_OK,
+                'expected_data': None
+            },
+            {
+                'name': 'Test that authorized user can add a new meal ingredient',
+                'request': (lambda: self.client.post(URL, {})),
+                'expected_status_code': status.HTTP_200_OK,
                 'expected_data': None
             },
             {
                 'name': 'Test that authorized user can add a new meal',
                 'request': (lambda: self.client.post(URL, {})),
-                'expected_status_code': status.HTTP_401_UNAUTHORIZED,
+                'expected_status_code': status.HTTP_200_OK,
                 'expected_data': None
             },
+
             {
                 'name': 'Test that uthorized user can update a meal',
                 'request': (lambda: self.client.patch(URL, {})),
-                'expected_status_code': status.HTTP_401_UNAUTHORIZED,
+                'expected_status_code': status.HTTP_200_OK,
                 'expected_data': None
             },
 
@@ -71,9 +83,7 @@ class PublicMealApiTests(TestCase):
         for i, test in enumerate(self.testTables):
             res = test["request"]()
             try:
-                print(res.data)
-                print("-"*20)
-                print(test["expected_data"])
+                print(test['name'])
                 self.assertEqual(res.status_code, test["expected_status_code"])
                 self.assertEqual(res.data, test["expected_data"])
 
