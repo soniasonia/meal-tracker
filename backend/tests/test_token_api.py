@@ -18,7 +18,7 @@ class UserTokenApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(username='sebix', password='test1234',email='test1@test.com')
+        self.user = create_user(username='sebix', password='test1234', email='test1@test.com')
         self.testTables = [
             {
                 'name': 'Test that a token is created for the user',

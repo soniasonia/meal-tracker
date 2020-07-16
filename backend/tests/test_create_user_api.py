@@ -48,7 +48,7 @@ class CreateUserApiTests(TestCase):
                     'password': 'test1234',
                     'email': 'test3@test.com'
                 },
-                'before': (lambda: create_user(username='sebix3', password='test1234',email='test3@test.com')),
+                'before': (lambda: create_user(username='sebix3', password='test1234', email='test3@test.com')),
                 'expected_status_code': status.HTTP_400_BAD_REQUEST,
                 'after': (lambda res: self.assertEqual(res.data["password"][0],
                                                        "A user with that username already exists."))
@@ -72,8 +72,3 @@ class CreateUserApiTests(TestCase):
             except Exception as e:
                 print(f"Test suite {i} failed: {test['name']}")
                 raise e
-
-
-
-
-
