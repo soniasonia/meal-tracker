@@ -28,7 +28,7 @@ class UserTokenApiTests(TestCase):
                 },
                 'expected_status_code': status.HTTP_200_OK,
                 'after': (lambda res: self.assertIn('token', res.data))
-                },
+            },
             {
                 'name': 'Test that token is not created if password is incorrect',
                 'payload': {

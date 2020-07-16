@@ -38,7 +38,7 @@ class CreateUserApiTests(TestCase):
                 },
                 'expected_status_code': status.HTTP_400_BAD_REQUEST,
                 'after': (lambda res: self.assertEqual(res.data["password"][0],
-                                                         "Ensure this field has at least 5 characters."))
+                                                       "Ensure this field has at least 5 characters."))
 
             },
             {
