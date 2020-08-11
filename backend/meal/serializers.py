@@ -33,9 +33,8 @@ class IngredientSerializer(serializers.ModelSerializer):
 class MealIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MealIngredient
-        ingredient = serializers.ReadOnlyField()
         kcal = serializers.ReadOnlyField()
-        fields = ('id', 'ingredient', 'kcal')
+        fields = ('id', 'meal', 'ingredient', 'weight', 'kcal')
         read_only_fields = ('id', 'kcal')
 
 
@@ -45,4 +44,4 @@ class MealSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Meal
         fields = ("id", "date", "total_kcal", "meal_ingredients")
-        read_only_fields = ("id", "total_kcal")
+        # read_only_fields = ("id", "total_kcal", "meal_ingredients")

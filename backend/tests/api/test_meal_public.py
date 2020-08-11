@@ -15,6 +15,7 @@ URL = reverse('meal:meal-list')
 def detail_url(_id):
     return reverse('meal:meal-detail', args=[_id])
 
+
 def create_new_user(username):
     return get_user_model().objects.create_user(
         username,
