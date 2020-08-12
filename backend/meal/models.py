@@ -13,18 +13,6 @@ class Ingredient(models.Model):
 class MealIngredient(models.Model):
     ingredient = models.ForeignKey('Ingredient',
                                    on_delete=models.CASCADE)
-    meal = models.ForeignKey('Meal', on_delete=models.CASCADE, related_name='meal_ingredients')
-    weight = models.IntegerField()
-
-    @property
-    def kcal(self):
-        return self.ingredient.kcal_per_100g * self.weight / 100
-
-    def __str__(self):
-        return f"{self.ingredient.name} {self.weight}g"
-class MealIngredient(models.Model):
-    ingredient = models.ForeignKey('Ingredient',
-                                   on_delete=models.CASCADE)
     meal = models.ForeignKey('Meal', on_delete=models.CASCADE,  related_name='meal_ingredients')
     weight = models.IntegerField()
 
@@ -52,4 +40,5 @@ class Meal(models.Model):
         else:
             return 0
 
-
+    def __str__(self):
+        return f"{self.id} {self.date}"

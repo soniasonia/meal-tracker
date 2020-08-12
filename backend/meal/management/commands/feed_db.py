@@ -2,6 +2,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from meal import models
 
+
 class Command(BaseCommand):
     """Django command to pause execution until database is available"""
 

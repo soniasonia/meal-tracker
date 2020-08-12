@@ -24,13 +24,13 @@ class PublicUserApiTests(TestCase):
             {
                 'name': 'Test that unauthorized user cannot POST profile',
                 'request': (lambda: self.client.post(ME_URL, {'username': 'sebix3',
-                                                               'password': 'test1234'})),
+                                                              'password': 'test1234'})),
                 'expected_status_code': status.HTTP_401_UNAUTHORIZED,
             },
             {
                 'name': 'Test that unauthorized user cannot update profile',
                 'request': (lambda: self.client.post(ME_URL, {'username': 'sebix3',
-                                                               'password': 'test1234'})),
+                                                              'password': 'test1234'})),
                 'expected_status_code': status.HTTP_401_UNAUTHORIZED,
             },
         ]
