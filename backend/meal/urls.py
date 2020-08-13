@@ -16,5 +16,3 @@ urlpatterns = [
     path('user/login/', obtain_auth_token, name='login'),
     path('user/me/', views.ManageUserView.as_view(), name='me'),
     path('user/logout/', views.LogoutView.as_view(), name='logout'),
-
-]

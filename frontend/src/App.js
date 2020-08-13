@@ -1,85 +1,55 @@
-import React from "react";
-import LoginForm from "./components/LoginForm";
-import CreateUserForm from "./components/CreateUserForm";
+import React, { useState } from 'react';
 import axios from "axios";
+import { APP_URL } from "./config";
+import { Dashboard } from "./components/Dashboard";
+import { LoginAndSignupForm } from "./components/Auth/LoginAndSignupForm";
+import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken } from "./session/localStorage" 
 
-const APP_URL = "http://0.0.0.0:8000";
+const App = () => {
+  const [authorized, setAuthorized] = useState(false);
 
-class App extends React.Component {
-  state = {
-    isLoggedIn: false,
-    page: "",
-    username: "",
-    error: null,
-  };
-  //TODO: Diplay message in case of error network (backend unavailable)
-
-  componentDidMount = () => localStorage.getItem("token") && this.verifyToken();
-
-  async verifyToken() {
+  const login = async token => {
+    setBackendAuthToken(token);
     try {
       const response = await axios.get(APP_URL + "/api/user/me/", {
         headers: {
-          Authorization: "Token " + localStorage.getItem("token"),
+          Authorization: `Token ${getBackendAuthToken()}`,
         },
       });
       if (response.data && response.data.username && response.status === 200) {
-        this.setState({ isLoggedIn: true, username: response.data.username });
-      } else {
-        localStorage.removeItem("token");
+        setAuthorized(response.data.username);
+        return;
       }
     } catch (error) {
-      localStorage.removeItem("token");
+      console.error("Could not perform verification of user token, performing logout.", error);
     }
+    return logout();
   }
 
-  onLoginSuccessful = (token) => {
-    localStorage.setItem("token", token);
-    this.setState({ isLoggedIn: true });
-    this.setState({ page: "" });
-  };
-
-  async logout() {
+  const logout = async () => {
     try {
-      await axios.get(APP_URL + "/api/user/logoutt/", {
+      await axios.get(APP_URL + "/api/user/logout/", {
         headers: {
-          Authorization: "Token " + localStorage.getItem("token"),
+          Authorization: `Token ${getBackendAuthToken()}`,
         },
       });
-    } catch (error) {}
-    localStorage.removeItem("token");
-    this.setState({ isLoggedIn: false });
+    } catch (error) {
+      console.error("Could not perform logout of user, wiping out local session.", error);
+    }
+    deleteBackendAuthToken();
+    setAuthorized(false);
   }
 
-  render() {
-    return (
-      <div className="App">
-        {this.state.isLoggedIn ? (
-          <div>
-            {" "}
-            <br></br>Hello, you are logged in<br></br>
-            <button onClick={() => this.logout()} className="item">
-              Log out
-            </button>
-          </div>
-        ) : (
-          <div className="ui placeholder segment">
-            <div className="ui two column very relaxed stackable grid">
-              <div className="column">
-                <h3>Login</h3>
-                <LoginForm url={APP_URL} trigger={this.onLoginSuccessful} />
-              </div>
-              <div className="column">
-                <h3>Create new user</h3>
-                <CreateUserForm url={APP_URL} />
-              </div>
-            </div>
-            <div className="ui vertical divider">Or</div>
-          </div>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      {
+        authorized ? 
+          <Dashboard user={{name: authorized}} logoutAction={logout}/> 
+        : 
+          <LoginAndSignupForm loginAction={login}/>
+      }
+    </div>
+  );
 }
 
 export default App;
