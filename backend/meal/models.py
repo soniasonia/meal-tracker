@@ -37,8 +37,7 @@ class Meal(models.Model):
         meal_ingredients = MealIngredient.objects.filter(meal=self)
         if len(meal_ingredients) > 0:
             return sum(i.kcal for i in meal_ingredients)
-        else:
-            return 0
+        return 0
 
     def __str__(self):
         return f"{self.id} {self.date}"
