@@ -13,7 +13,7 @@ class Ingredient(models.Model):
 class MealIngredient(models.Model):
     ingredient = models.ForeignKey('Ingredient',
                                    on_delete=models.CASCADE)
-    meal = models.ForeignKey('Meal', on_delete=models.CASCADE,  related_name='meal_ingredients')
+    meal = models.ForeignKey('Meal', on_delete=models.CASCADE, related_name='meal_ingredients')
     weight = models.IntegerField()
 
     @property

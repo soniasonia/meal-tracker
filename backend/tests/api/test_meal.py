@@ -62,19 +62,19 @@ class PublicMealApiTests(TestCase):
 
     def test_that_unauthorized_user_cannot_create_meal(self):
         res = self.client.post(URL, {'meal_ingredients': [
-                        {'ingredient': self.egg.id,
-                         'weight': 100},
-                        {'ingredient': self.tomato.id,
-                         'weight': 200}
-                    ]}, format='json')
+            {'ingredient': self.egg.id,
+             'weight': 100},
+            {'ingredient': self.tomato.id,
+             'weight': 200}
+        ]}, format='json')
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_that_authorized_user_can_create_meal(self):
         self.client.force_authenticate(self.user)
         res = self.client.post(URL, {'meal_ingredients': [
-                        {'ingredient': self.egg.id,
-                         'weight': 100},
-                        {'ingredient': self.tomato.id,
-                         'weight': 200}
-                    ]}, format='json')
+            {'ingredient': self.egg.id,
+             'weight': 100},
+            {'ingredient': self.tomato.id,
+             'weight': 200}
+        ]}, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)

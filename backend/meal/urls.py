@@ -9,11 +9,10 @@ router = DefaultRouter()
 router.register("meal", views.MealViewSet)
 router.register("ingredient", views.IngredientViewSet)
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path('user/create/', views.CreateUserView.as_view(), name='create_user'),
     path('user/login/', obtain_auth_token, name='login'),
     path('user/me/', views.ManageUserView.as_view(), name='me'),
     path('user/logout/', views.LogoutView.as_view(), name='logout'),
-    ]
+]

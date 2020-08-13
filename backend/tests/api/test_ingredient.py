@@ -29,9 +29,9 @@ class IngredientApiTests(TestCase):
     def test_authorized_user_can_add_an_ingredient(self):
         self.client.force_authenticate(self.user)
         res = self.client.post(INGREDIENT_URL, {
-                'name': 'Mozzarella',
-                'kcal_per_100g': 100,
-            })
+            'name': 'Mozzarella',
+            'kcal_per_100g': 100,
+        })
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['name'], 'Mozzarella')
         self.assertEqual(res.data['kcal_per_100g'], 100)
