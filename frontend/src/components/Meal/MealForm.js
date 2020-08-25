@@ -12,6 +12,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import ColorizeIcon from '@material-ui/icons/Colorize';
 
+import axios from "axios";
+import { APP_URL } from "../../config";
+import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken } from "../../session/localStorage" 
+
+
 const useStyles = makeStyles((theme) => ({
   button: {
     maxWidth: 345,
@@ -29,6 +34,21 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '56.25%', // 16:9
   },
 }));
+
+async function createMeal() {
+  const response = await axios.post(APP_URL + "/api/meal/", 
+  {'meal_ingredients': [
+    {'ingredient': '1',
+     'weight': 100},
+    {'ingredient': '1',
+     'weight': 200}]
+  },
+  {
+    headers: {
+      Authorization: `Token ${getBackendAuthToken()}`,
+    },
+  });
+}
 
 const MealForm = () => {
   const classes = useStyles();
@@ -67,6 +87,7 @@ const MealForm = () => {
               <TextField
                   label="Ingredient"
                   defaultValue="Apple"
+                  onChange={e => this.ListeningStateChangedEvent({})}
                 />
                 <TextField
                   label="Weight (in grams)"

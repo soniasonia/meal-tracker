@@ -38,3 +38,4 @@ services:
       - ./frontend:/usr/src/app
     environment:
       - NODE_ENV=development
+    stdin_open: true
