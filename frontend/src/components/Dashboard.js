@@ -1,14 +1,12 @@
 import React from "react";
+import { Header } from './Header';
+import { MealContainer } from "./Meal/MealContainer" ;
 
 const Dashboard = ({ user, logoutAction }) => (
-    <div>
-      <div>
-        Hello, you are authorized as {user.name}
-      </div>
-      <button onClick={() => logoutAction()} className="item">
-        Log out
-      </button>
-    </div>
+  <div>
+    <Header user={user} logoutAction={logoutAction}/>
+    <MealContainer />
+  </div>
   )
 
 export {
