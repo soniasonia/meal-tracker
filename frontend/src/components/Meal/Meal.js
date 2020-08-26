@@ -24,23 +24,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Meal = (props) => {
+const Meal = ({date, photoUrl, ingredients = [], name}) => {
     const classes = useStyles();
 
     return (
         <Card className={classes.root}>
             <CardHeader
-                title="Shrimp and Chorizo Paella"
-                subheader={props.date}
+                title={name}
+                subheader={date}
             />
             <CardMedia
                 className={classes.media}
-                image="https://material-ui.com/static/images/cards/paella.jpg"
-                title="Paella dish"
+                image={photoUrl || "https://material-ui.com/static/images/cards/paella.jpg"}
+                title={name}
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    <ul>{props.ingredients.map(({name, weight}) => (
+                    <ul>{ingredients.map(({name, weight}) => (
                         <li>{name} {weight}</li>
                     ))}</ul>
                     -- <br />

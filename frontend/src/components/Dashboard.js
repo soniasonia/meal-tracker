@@ -2,9 +2,9 @@ import React from "react";
 import { Header } from './Header';
 import { MealContainer } from "./Meal/MealContainer" ;
 
-const Dashboard = ({ user, logoutAction }) => (
+const Dashboard = ({ user, onLogoutHook }) => (
   <div>
-    <Header user={user} logoutAction={logoutAction}/>
+    <Header user={user} logoutAction={onLogoutHook}/>
     <MealContainer />
   </div>
   )

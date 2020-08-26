@@ -24,6 +24,8 @@ const MealContainer = () => {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
+    // TODO: Missing try catch block.
+    // TODO: Missing check for response code.
     async function fetchMeals() {
       const response = await axios.get(APP_URL + "/api/meal/", {
         headers: {
@@ -38,15 +40,7 @@ const MealContainer = () => {
           Authorization: `Token ${getBackendAuthToken()}`,
         },
       });
-      var dict = {};
-      var ingredients = response.data;
-      ingredients.map((i) => {
-        dict[i.id] = i;
-      });
-      setIngredients(dict);
-      console.log(dict);
-      console.log(dict[1]);
-      console.log(dict[1].name)
+      setIngredients(response.data)
     }
     fetchMeals();
     fetchIngredients();
@@ -66,36 +60,16 @@ const MealContainer = () => {
       <IngredientForm></IngredientForm>
       <h2>Select ingredient</h2>
       <IngredientSelection></IngredientSelection>
+      
       <h2>Meals</h2>
-      {meals ? (
-      <div>
-        <table>
-          <thead>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Calories</th>
-            <th>Ingredients</th>
-          </thead>
-          {meals.map((meal) => (
-            <tr>
-              <td>{meal.id}</td>
-              <td> {meal.date} </td>
-              <td> {meal.total_kcal} </td>
-              <td>
-                <ul>
-                  {meal.meal_ingredients.map((ingredient) => (
-                    <li>
-                      {ingredients[ingredient.ingredient].name} {ingredient.weight}g
-                    </li>
-                  ))}
-                </ul>
-              </td>
-            </tr>
-          ))}
-        </table>
-        </div>) : (
-        "No meals..."
-      )}
+      {
+        meals && meals.length > 0 ? meals.map(meal => (
+          <Meal 
+            name={meal.name || "Shrimp and Chorizo Paella"}
+            photoUrl={meal.photoUrl || "https://material-ui.com/static/images/cards/paella.jpg"}
+          />
+        )) : <h3>No meals found! Add some ;)</h3>
+      }
       <MealForm />
     </div>
   );

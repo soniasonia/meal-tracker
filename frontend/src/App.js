@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { APP_URL } from "./config";
 import { Dashboard } from "./components/Dashboard";
 import { LoginAndSignupForm } from "./components/Auth/LoginAndSignupForm";
-import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken } from "./session/localStorage" 
+import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken, isBackendAuthTokenValid } from "./session/localStorage" 
 
 const App = () => {
   const [authorized, setAuthorized] = useState(false);
 
-  const login = async token => {
+  // If we have valid token, authorize user.
+  useEffect(() => {
+    if (isBackendAuthTokenValid()) {
+      authorize(getBackendAuthToken())
+    }
+  }, []);
+
+  /**
+   * Authorize user with provided token. In case of authorization failure, logout user.
+   * @param {string} token 
+   */
+  const authorize = async token => {
     setBackendAuthToken(token);
     try {
       const response = await axios.get(APP_URL + "/api/user/me/", {
@@ -26,6 +37,9 @@ const App = () => {
     return logout();
   }
 
+  /**
+   * Logout token by calling API and destroying AuthToken session.
+   */
   const logout = async () => {
     try {
       await axios.get(APP_URL + "/api/user/logout/", {
@@ -44,9 +58,9 @@ const App = () => {
     <div className="App">
       {
         authorized ? 
-          <Dashboard user={{name: authorized}} logoutAction={logout}/> 
+          <Dashboard user={{name: authorized}} onLogoutHook={logout}/> 
         : 
-          <LoginAndSignupForm loginAction={login}/>
+          <LoginAndSignupForm onLoginHook={authorize}/>
       }
     </div>
   );

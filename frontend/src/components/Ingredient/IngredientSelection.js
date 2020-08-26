@@ -18,7 +18,6 @@ const IngredientSelection = (props) => {
             </div>
           ))
         : null}
-      ;
     </div>
   );
 };

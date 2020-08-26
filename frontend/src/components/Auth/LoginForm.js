@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { errorStyle } from "./_styles"
 
-const LoginForm = ({ url, loginAction }) => {
+const LoginForm = ({ url, authorizeTokenAction }) => {
   const [ formData, setFormData ] = useState({ login: "", password: "" });
   const [ error, setError ] = useState(false);
 
@@ -13,7 +13,9 @@ const LoginForm = ({ url, loginAction }) => {
         username: formData.login,
         password: formData.password,
       });
-      loginAction(response.data.token);
+      if (response.data && response.data.token && response.status === 200) {
+        authorizeTokenAction(response.data.token);
+      }
     } catch (error) {
       if (
         error.response &&
