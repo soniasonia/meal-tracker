@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Meal = () => {
+const Meal = (props) => {
     const classes = useStyles();
 
     return (
         <Card className={classes.root}>
             <CardHeader
                 title="Shrimp and Chorizo Paella"
-                subheader="July 16, 2016"
+                subheader={props.date}
             />
             <CardMedia
                 className={classes.media}
@@ -40,8 +40,9 @@ const Meal = () => {
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    Rice - 70g - 200 kcal <br />
-                    Carrot - 50g - 30 kcal <br />
+                    <ul>{props.ingredients.map(({name, weight}) => (
+                        <li>{name} {weight}</li>
+                    ))}</ul>
                     -- <br />
                     Total: 230 kcal <br />
                 </Typography>
