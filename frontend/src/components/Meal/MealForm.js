@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
+
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +14,7 @@ import ColorizeIcon from '@material-ui/icons/Colorize';
 
 import axios from "axios";
 import { APP_URL } from "../../config";
+import { IngredientRow } from "./IngredientRow";
 import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken } from "../../session/localStorage" 
 
 
@@ -53,6 +54,7 @@ async function createMeal() {
 const MealForm = () => {
   const classes = useStyles();
   const [formOpened, setFormOpened] = React.useState(false);
+  const [ingredients, setIngredients] = React.useState(false);
 
   const handleFormOpen = () => {
     setFormOpened(true);
@@ -65,6 +67,7 @@ const MealForm = () => {
   const handleFormSubmit = () => {
     alert("in progress!");
   }
+
 
   return (
     <div>
@@ -83,37 +86,9 @@ const MealForm = () => {
         <DialogContent>
           <DialogContentText>
             <form className={classes.formRoot} noValidate autoComplete="off">
-              <div>
-              <TextField
-                  label="Ingredient"
-                  defaultValue="Apple"
-                  onChange={e => this.ListeningStateChangedEvent({})}
-                />
-                <TextField
-                  label="Weight (in grams)"
-                  defaultValue="100"
-                />
-                 <TextField
-                  label="Kcal (in 100 grams)"
-                  defaultValue="43"
-                />
-              </div>
-              <div>
-              <TextField
-                  label="Ingredient"
-                  defaultValue="Apple"
-                />
-                <TextField
-                  error
-                  label="Weight (in grams)"
-                  defaultValue="dupa"
-                  helperText="Incorrect entry, must be a number!"
-                  />
-                 <TextField
-                  label="Kcal (in 100 grams)"
-                  defaultValue="43"
-                />
-              </div>
+
+            <IngredientRow></IngredientRow>
+            <IngredientRow></IngredientRow>
               <div>
 
               <Tooltip title="New Ingredient">

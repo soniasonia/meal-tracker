@@ -41,10 +41,25 @@ class MealViewSet(viewsets.GenericViewSet,
                   mixins.UpdateModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin):
-    queryset = models.Meal.objects.all()
+
     serializer_class = serializers.MealSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    # queryset = self.get_queryset()
+
+    def get_queryset(self):
+        """
+        Optionally restrict the returned meals to a given day
+        by filtering against a 'date' query parameter in the URL.
+        """
+        queryset = models.Meal.objects.all()
+        date = self.request.query_params.get('date', None)
+        if date is not None:
+            year = date[:4]
+            month = date[4:6]
+            day = date[6:]
+            queryset = queryset.filter(date__day=day, date__month=month,date__year=year)
+        return queryset
 
     def get_serializer_class(self):
         """Return appropriate serializer class"""
@@ -64,3 +79,14 @@ class IngredientViewSet(viewsets.GenericViewSet,
     serializer_class = serializers.IngredientSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """
+        Optionally restrict the returned meals to a given day
+        by filtering against a 'date' query parameter in the URL.
+        """
+        queryset = models.Ingredient.objects.all()
+        starts_with = self.request.query_params.get('startswith', None)
+        if starts_with is not None:
+            queryset = queryset.filter(name__startswith=starts_with)
+        return queryset

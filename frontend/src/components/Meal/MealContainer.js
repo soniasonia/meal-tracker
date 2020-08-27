@@ -11,6 +11,7 @@ import {
   getBackendAuthToken,
   deleteBackendAuthToken,
 } from "../../session/localStorage";
+import {Day} from "./Day";
 
 const useStyles = makeStyles({
   mealContainer: {
@@ -27,7 +28,7 @@ const MealContainer = () => {
     // TODO: Missing try catch block.
     // TODO: Missing check for response code.
     async function fetchMeals() {
-      const response = await axios.get(APP_URL + "/api/meal/", {
+      const response = await axios.get(APP_URL + "/api/meal/?date=20200825", {
         headers: {
           Authorization: `Token ${getBackendAuthToken()}`,
         },
@@ -60,17 +61,22 @@ const MealContainer = () => {
       <IngredientForm></IngredientForm>
       <h2>Select ingredient</h2>
       <IngredientSelection></IngredientSelection>
-      
+      <MealForm />
       <h2>Meals</h2>
       {
         meals && meals.length > 0 ? meals.map(meal => (
           <Meal 
+            key={meal.id}
             name={meal.name || "Shrimp and Chorizo Paella"}
             photoUrl={meal.photoUrl || "https://material-ui.com/static/images/cards/paella.jpg"}
+            date={meal.date}
+            total_kcal={meal.total_kcal || "0" }
+            ingredients={meal.meal_ingredients}
           />
         )) : <h3>No meals found! Add some ;)</h3>
       }
-      <MealForm />
+ 
+      <Day meals={meals}></Day>
     </div>
   );
 };
