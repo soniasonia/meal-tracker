@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { APP_URL } from "../../config";
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -12,8 +14,21 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import Card from "@material-ui/core/Card";
+import Tooltip from "@material-ui/core/Tooltip";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import {
+    getBackendAuthToken,
+  } from "../../session/localStorage";
+import { 
+    getCardTitleAsDate, 
+    getCardSubtitleAsCalories, 
+    getMealNameAsTime } from "./helpers";
 
 const useRowStyles = makeStyles({
     root: {
@@ -24,7 +39,39 @@ const useRowStyles = makeStyles({
   });
 
 
-const Day = ({ meals }) => {
+const useStyles = makeStyles((theme) => ({
+root: {
+    maxWidth: 345,
+    minWidth: 280,
+    minHeight: 190,
+    display: "inline-block",
+    margin: 10,
+},
+media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9
+},
+}));
+
+
+const Day = ({ day }) => {
+
+    const [meals, setMeals] = useState([]);
+    const classes = useStyles();
+
+    useEffect(() => {
+        // TODO: Missing try catch block.
+        // TODO: Missing check for response code.
+        async function fetchMeals() {
+          const response = await axios.get(APP_URL + "/api/meal/?date=" + day, {
+            headers: {
+              Authorization: `Token ${getBackendAuthToken()}`,
+            },
+          });
+          setMeals(response.data);
+        }
+        fetchMeals();
+      }, []);
 
     function IngredientDetails(item) {
         const key = item.ingredient.id;
@@ -34,10 +81,9 @@ const Day = ({ meals }) => {
         const kcal = item.kcal;
         return (
           <TableRow key={key}>
-            <TableCell>{name}</TableCell>
-            <TableCell align="right">{kcal_per_100g}</TableCell>
-            <TableCell align="right">{weight}</TableCell>
-            <TableCell align="right">{kcal}</TableCell>
+            <TableCell>{name}<br></br>({kcal_per_100g} kcal)</TableCell>
+            <TableCell align="right">{weight} g</TableCell>
+            <TableCell align="right">{kcal} kcal</TableCell>
           </TableRow>
         );
       }
@@ -56,24 +102,13 @@ const Day = ({ meals }) => {
                 </IconButton>
               </TableCell>
               <TableCell component="th" scope="row">{name}</TableCell>
-              <TableCell align="right">{total_kcal}</TableCell>
+              <TableCell align="right"><b>{total_kcal}</b> kcal</TableCell>
             </TableRow>
             <TableRow>
               <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                   <Box margin={1}>
-                    <Typography variant="h6" gutterBottom component="div">
-                      History
-                    </Typography>
                     <Table size="small" aria-label="purchases">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Ingredient</TableCell>
-                          <TableCell align="right">Calories per 100g</TableCell>
-                          <TableCell align="right">Amount</TableCell>
-                          <TableCell align="right">Total calories</TableCell>
-                        </TableRow>
-                      </TableHead>
                       <TableBody>
                         {ingredients.map(IngredientDetails)}
                       </TableBody>
@@ -88,20 +123,15 @@ const Day = ({ meals }) => {
 
 
 
-    return (
+    function MealTable ()
+    {
+        return (
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Meal</TableCell>
-                <TableCell align="right">Calories</TableCell>
-              </TableRow>
-            </TableHead>
             <TableBody>
               {meals.map((row) => (
                 <Row key={row.id} 
-                name={row.name || "Shrimp and Chorizo Paella"}
+                name={row.name || getMealNameAsTime(row.date)}
                 total_kcal={row.total_kcal || "0" }
                 ingredients={row.meal_ingredients || []}
                 />
@@ -110,6 +140,18 @@ const Day = ({ meals }) => {
           </Table>
         </TableContainer>
       );
+              }
+
+    return (
+        <Card className={classes.root}>
+            <CardHeader 
+            title={getCardSubtitleAsCalories(meals)} 
+            subheader={getCardTitleAsDate(day)}/>
+            <CardContent>
+                <MealTable></MealTable>
+            </CardContent>
+        </Card>
+    )
 
 };
 export { Day };

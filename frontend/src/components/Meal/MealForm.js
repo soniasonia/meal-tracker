@@ -15,7 +15,7 @@ import ColorizeIcon from '@material-ui/icons/Colorize';
 import axios from "axios";
 import { APP_URL } from "../../config";
 import { IngredientRow } from "./IngredientRow";
-import { setBackendAuthToken, getBackendAuthToken, deleteBackendAuthToken } from "../../session/localStorage" 
+import { getBackendAuthToken } from "../../session/localStorage" 
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,25 +36,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function createMeal() {
-  const response = await axios.post(APP_URL + "/api/meal/", 
-  {'meal_ingredients': [
-    {'ingredient': '1',
-     'weight': 100},
-    {'ingredient': '1',
-     'weight': 200}]
-  },
-  {
-    headers: {
-      Authorization: `Token ${getBackendAuthToken()}`,
-    },
-  });
-}
 
 const MealForm = () => {
+  const maxIngredients = 2;
   const classes = useStyles();
   const [formOpened, setFormOpened] = React.useState(false);
-  const [ingredients, setIngredients] = React.useState(false);
+  const [ingredients, setIngredients] = React.useState([]);
+
+  const pushNewIngredient = (index, ingredient) => {
+    if (ingredients[index] && ingredients[index].id === ingredient.id && ingredients[index].weight === ingredient.weight) {
+      return;
+    }
+    ingredients[index] = ingredient;
+    setIngredients(ingredients)
+  }
 
   const handleFormOpen = () => {
     setFormOpened(true);
@@ -65,9 +60,22 @@ const MealForm = () => {
   };
 
   const handleFormSubmit = () => {
-    alert("in progress!");
+    createMeal();
   }
 
+  async function createMeal() {
+    const ingredientList = ingredients.map(i => ({ingredient: i.id, weight: i.weight}))
+    console.log(ingredientList)
+    const response = await axios.post(APP_URL + "/api/meal/", 
+    {'meal_ingredients': ingredientList
+    },
+    {
+      headers: {
+        Authorization: `Token ${getBackendAuthToken()}`,
+      },
+    });
+  }
+  
 
   return (
     <div>
@@ -87,8 +95,9 @@ const MealForm = () => {
           <DialogContentText>
             <form className={classes.formRoot} noValidate autoComplete="off">
 
-            <IngredientRow></IngredientRow>
-            <IngredientRow></IngredientRow>
+            {/* TODO: Loop over maxIngredients and yield IngredientRow, use value as index */}
+            <IngredientRow addIngredientToForm={pushNewIngredient} index={0}></IngredientRow>
+            <IngredientRow addIngredientToForm={pushNewIngredient} index={1}></IngredientRow>
               <div>
 
               <Tooltip title="New Ingredient">
