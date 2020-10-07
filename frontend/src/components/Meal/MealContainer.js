@@ -6,7 +6,6 @@ import { MealForm } from "./MealForm";
 import { makeStyles } from "@material-ui/core/styles";
 import { getBackendAuthToken } from "../../session/localStorage";
 import { Day } from "./Day";
-import { getDaysArray } from "./helpers";
 
 const useStyles = makeStyles({
   mealContainer: {
@@ -16,51 +15,18 @@ const useStyles = makeStyles({
 
 const MealContainer = () => {
   const classes = useStyles();
-  const [meals, setMeals] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
-
-  useEffect(() => {
-    // TODO: Missing try catch block.
-    // TODO: Missing check for response code.
-    async function fetchMeals() {
-      const response = await axios.get(APP_URL + "/api/meal/?date=20200902", {
-        headers: {
-          Authorization: `Token ${getBackendAuthToken()}`,
-        },
-      });
-      setMeals(response.data);
-    }
-    async function fetchIngredients() {
-      const response = await axios.get(APP_URL + "/api/ingredient/", {
-        headers: {
-          Authorization: `Token ${getBackendAuthToken()}`,
-        },
-      });
-      setIngredients(response.data);
-    }
-    fetchMeals();
-    fetchIngredients();
-  }, []);
-
-  // function getListOfIngredientsPerMeal(meal_ingredients)
-  // {
-  //   var dict = {};
-  //   meal_ingredients.map((ingredient) => (
-  //     dict[]
-  //   ))
-  // }
+  const [daysOffset, setDaysOffset] = React.useState([0,1,2,3,4,5,6]);
 
   return (
     <div className={classes.mealContainer}>
-      <IngredientForm/> <br></br><MealForm />
+      <IngredientForm /> <br></br>
+      <MealForm />
       <h2>Meals</h2>
       {
-
-
-      getDaysArray(7).map((day) => (
-        <Day day={day}></Day>
-      ))}
-      
+        daysOffset.map(day => (
+          <Day key={day} day={day}></Day>
+        ))
+      }
     </div>
   );
 };

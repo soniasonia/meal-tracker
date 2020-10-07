@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from rest_framework import generics, authentication, permissions
 from rest_framework import viewsets, mixins, views, status
 from rest_framework.authentication import TokenAuthentication
@@ -53,12 +55,16 @@ class MealViewSet(viewsets.GenericViewSet,
         by filtering against a 'date' query parameter in the URL.
         """
         queryset = models.Meal.objects.all()
-        date = self.request.query_params.get('date', None)
-        if date is not None:
-            year = date[:4]
-            month = date[4:6]
-            day = date[6:]
-            queryset = queryset.filter(date__day=day, date__month=month,date__year=year)
+        day_offset = self.request.query_params.get('dayOffset', None)
+        if day_offset is None:
+            return queryset
+        try:
+            day_offset = timedelta(int(day_offset))
+            d = datetime.now() - day_offset
+            queryset = queryset.filter(date__day=d.day, date__month=d.month, date__year=d.year)
+        except ValueError:
+            return Response({"dayOffset has to be integer"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return queryset
 
     def get_serializer_class(self):

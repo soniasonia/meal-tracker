@@ -18,7 +18,7 @@ class MealIngredient(models.Model):
 
     @property
     def kcal(self):
-        return self.ingredient.kcal_per_100g * self.weight / 100
+        return int(self.ingredient.kcal_per_100g * self.weight / 100)
 
     def __str__(self):
         return f"{self.ingredient.name} {self.weight}g"
