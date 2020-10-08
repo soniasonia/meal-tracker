@@ -65,7 +65,7 @@ class MealViewSet(viewsets.GenericViewSet,
             queryset = queryset.filter(date__day=d.day, date__month=d.month, date__year=d.year)
         except ValueError:
             return Response({"dayOffset has to be integer"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return queryset
 
     def get_serializer_class(self):

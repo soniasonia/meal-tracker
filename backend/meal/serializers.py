@@ -32,6 +32,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class MealIngredientSerializer(serializers.ModelSerializer):
     ingredient = IngredientSerializer()
+
     class Meta:
         model = models.MealIngredient
         kcal = serializers.ReadOnlyField()
