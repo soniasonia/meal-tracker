@@ -52,7 +52,8 @@ class MealViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         """
         Optionally restrict the returned meals to a given day
-        by filtering against a 'date' query parameter in the URL.
+        by filtering against a 'dayOffset' query parameter in the URL
+        where 0 is today, 1 is yesterday etc.
         """
         queryset = models.Meal.objects.all()
         day_offset = self.request.query_params.get('dayOffset', None)
@@ -88,8 +89,8 @@ class IngredientViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """
-        Optionally restrict the returned meals to a given day
-        by filtering against a 'date' query parameter in the URL.
+        Optionally restrict the returned ingredients
+        by filtering against a 'startswith' query parameter in the URL.
         """
         queryset = models.Ingredient.objects.all()
         starts_with = self.request.query_params.get('startswith', None)
