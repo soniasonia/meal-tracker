@@ -53,6 +53,14 @@ class MealSerializerCreate(serializers.ModelSerializer):
         model = models.Meal
         fields = ("meal_ingredients",)
 
+    def validate(self, attrs):
+        """
+        Check that meal is not empty
+        """
+        if not attrs['meal_ingredients']:
+            raise serializers.ValidationError("Meal cannot be empty")
+        return attrs
+
     def create(self, validated_data):
         ingredient_data = validated_data.pop('meal_ingredients')
         validated_data['date'] = datetime.now()

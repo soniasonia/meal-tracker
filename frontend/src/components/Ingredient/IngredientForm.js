@@ -125,7 +125,7 @@ const IngredientForm = () => {
               ) : null}
             </form>
             <br></br>
-            {error.non_field_errors ? (
+            {error && error.non_field_errors ? (
               <div className="ui negative message" style={errorStyle}>
                 {error.non_field_errors}
               </div>
