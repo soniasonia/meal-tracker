@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { errorStyle } from "./_styles"
 
-const CreateUserForm = ({ url }) => {
+const SignupForm = ({ url }) => {
   const [ formData, setFormData ] = useState({ login: "", password: "", email: "" });
   const [ formResponse, setFormResponse ] = useState({ created: false });
   const [ error, setError ] = useState(false);
@@ -84,4 +84,4 @@ const CreateUserForm = ({ url }) => {
   );
 }
 
-export default CreateUserForm;
+export default SignupForm;
