@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -16,32 +15,16 @@ import axios from "axios";
 import { APP_URL } from "../../config";
 import { IngredientRow } from "./IngredientRow";
 import { getBackendAuthToken } from "../../session/localStorage";
-import { errorStyle } from "../Auth/_styles";
-
-const useStyles = makeStyles((theme) => ({
-  button: {
-    maxWidth: 345,
-    display: "inline-block",
-    margin: 10,
-  },
-  formRoot: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: 200,
-    },
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-}));
+import {useHeaderStyles, useFormStyles} from "../../styles/theme";
 
 const MealForm = () => {
-  const maxIngredients = 2;
-  const classes = useStyles();
   const [formOpened, setFormOpened] = React.useState(false);
   const [ingredients, setIngredients] = React.useState([]);
   const [error, setError] = React.useState(false);
+
+  const maxIngredients = 2;
+  const headerClasses = useHeaderStyles();
+  const formClasses = useFormStyles();
 
   const pushNewIngredient = (index, ingredient) => {
     if (
@@ -98,18 +81,20 @@ const MealForm = () => {
   };
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleFormOpen}>
-        Add new meal!
+    <React.Fragment>
+      <Button 
+        variant="contained" 
+        className={headerClasses.menuButton}
+        onClick={handleFormOpen}>
+        Add new meal
       </Button>
-
       <Dialog maxWidth="md" open={formOpened} onClose={handleFormClose}>
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Add new meal for Today!
+          Add new meal for Today
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <form className={classes.formRoot} noValidate autoComplete="off">
+            <form className={formClasses.formRoot} noValidate autoComplete="off">
               {/* TODO: Loop over maxIngredients and yield IngredientRow, use value as index */}
               <IngredientRow
                 addIngredientToForm={pushNewIngredient}
@@ -135,7 +120,7 @@ const MealForm = () => {
             </form>
             <br></br>
             {error && error.non_field_errors ? (
-              <div className="ui negative message" style={errorStyle}>
+              <div className={formClasses.error}>
                 {error.non_field_errors}
               </div>
             ) : null}
@@ -150,7 +135,7 @@ const MealForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+      </React.Fragment>
   );
 };
 

@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { APP_URL } from "../../config";
-import { IngredientForm } from "../Ingredient/IngredientForm";
-import { MealForm } from "./MealForm";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { getBackendAuthToken } from "../../session/localStorage";
 import { Day } from "./Day";
 
 const useStyles = makeStyles({
@@ -19,8 +14,6 @@ const MealContainer = () => {
 
   return (
     <div className={classes.mealContainer}>
-      <IngredientForm /> <br></br>
-      <MealForm />
       <h2>Meals</h2>
       {
         daysOffset.map(day => (

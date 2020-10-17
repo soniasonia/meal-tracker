@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -12,31 +11,17 @@ import axios from "axios";
 import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
 import { errorStyle } from "../Auth/_styles";
+import {useHeaderStyles, useFormStyles} from "../../styles/theme";
 
-const useStyles = makeStyles((theme) => ({
-  button: {
-    maxWidth: 345,
-    display: "inline-block",
-    margin: 10,
-  },
-  formRoot: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: 200,
-    },
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-}));
 
 const IngredientForm = () => {
   const [name, setName] = React.useState("");
   const [kcalPer100, setKcalPer100] = React.useState("");
   const [formOpened, setFormOpened] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const classes = useStyles();
+  
+  const headerClasses = useHeaderStyles();
+  const formClasses = useFormStyles();
 
   const handleFormOpen = () => {
     setFormOpened(true);
@@ -85,18 +70,21 @@ const IngredientForm = () => {
   };
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleFormOpen}>
-        Add new ingredient!
+    <React.Fragment>
+      <Button 
+        variant="contained" 
+        className={headerClasses.menuButton}
+        onClick={handleFormOpen}>
+        Add new ingredient
       </Button>
 
       <Dialog maxWidth="md" open={formOpened} onClose={handleFormClose}>
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Add new ingredient !
+          Add new ingredient
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <form className={classes.formRoot}>
+            <form className={formClasses.formRoot}>
               <TextField id="standard-basic" 
                 label="Name"
                 type="text"
@@ -105,7 +93,7 @@ const IngredientForm = () => {
               </TextField>
               <br></br>{" "}
               {error && error.name ? (
-                <div className="ui pointing basic label" style={errorStyle}>
+                <div className={formClasses.fieldError}>
                   {error.name}
                 </div>
               ) : null}
@@ -119,14 +107,14 @@ const IngredientForm = () => {
               </TextField>
               <br></br>
               {error && error.kcal_per_100g ? (
-                <div className="ui pointing basic label" style={errorStyle}>
+                <div className={formClasses.fieldError}>
                   {error.kcal_per_100g}
                 </div>
               ) : null}
             </form>
             <br></br>
             {error && error.non_field_errors ? (
-              <div className="ui negative message" style={errorStyle}>
+              <div className={formClasses.error}>
                 {error.non_field_errors}
               </div>
             ) : null}
@@ -141,7 +129,7 @@ const IngredientForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </React.Fragment>
   );
 };
 

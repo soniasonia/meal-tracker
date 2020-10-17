@@ -32,7 +32,6 @@ class LoginForm extends React.Component {
         this.setState({ errors: error.response.data });
         return;
       }
-
       this.setState({
         errors: { unknown: error.toString() },
       });
