@@ -76,7 +76,6 @@ class MealViewSet(viewsets.GenericViewSet,
 
     def perform_create(self, serializer):
         """Create a new object"""
-        print(self.request.data)
         serializer.save(user=self.request.user)
 
 

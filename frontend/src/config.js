@@ -1,5 +1,6 @@
 const APP_URL = "http://0.0.0.0:8000";
+const TRACKED_DAYS_THRESHOLD = 7
 
 export {
-    APP_URL
+    APP_URL, TRACKED_DAYS_THRESHOLD
 }

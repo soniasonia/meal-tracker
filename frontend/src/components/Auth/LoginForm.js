@@ -67,9 +67,9 @@ const LoginForm = ({ url, authorizeTokenAction }) => {
         </div>
 
         {error.non_field_errors ? (
-          <div className={formClasses.error}>
+          <center><div className={formClasses.error}>
             { error.non_field_errors }
-          </div>
+          </div><br></br><br></br></center>
         ) : null}
 
         <button type="submit" className="ui button">

@@ -1,20 +1,46 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Day } from "./Day";
+import React, { useEffect } from "react";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
-const useStyles = makeStyles({
-  mealContainer: {
-    padding: 30,
-  },
-});
+import { Day } from "./Day";
+import { TRACKED_DAYS_THRESHOLD } from "../../config"
+import { useAppStyles }  from "../../styles/theme";
+
 
 const MealContainer = () => {
-  const classes = useStyles();
-  const [daysOffset, setDaysOffset] = React.useState([0,1,2,3,4,5,6]);
+  const classes = useAppStyles();
+  const range = Array.from(Array(TRACKED_DAYS_THRESHOLD).keys());
+  const [daysThreshold, setDaysThreshold] =  React.useState(TRACKED_DAYS_THRESHOLD);
+  const [daysOffset, setDaysOffset] = React.useState(range);
+
+  useEffect(() => {
+    setDaysOffset(Array.from(Array(daysThreshold).keys()));
+  }, [daysThreshold]); 
+
+  const handleChange = (numb) => {
+    setDaysThreshold(numb);
+  }
 
   return (
     <div className={classes.mealContainer}>
-      <h2>Meals</h2>
+      
+      <div className={classes.daySelection}>Showing the last  
+          <ButtonGroup size="large" >
+              <Button 
+                color="primary"
+                variant={daysThreshold === 7 ? "contained" : ""}          
+                onClick={daysThreshold === 7 ? null : () => handleChange(7)}>7</Button>
+              <Button 
+                color="primary"
+                variant={daysThreshold === 14 ? "contained" : ""}
+                onClick={daysThreshold === 14 ? null : () => handleChange(14)}>14</Button>
+              <Button 
+                color="primary"
+                variant={daysThreshold === 30 ? "contained" : ""}
+                onClick={daysThreshold === 30 ? null : () => handleChange(30)}>30</Button>
+            </ButtonGroup>
+        days 
+      </div> 
       {
         daysOffset.map(day => (
           <Day key={day} day={day}></Day>

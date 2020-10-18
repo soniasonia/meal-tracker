@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { DateTime } from "luxon";
-import { APP_URL } from "../../config";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -14,18 +13,16 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
+import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+
+import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
 import { useDayStyles } from "../../styles/theme";
 
-function getCardSubtitleAsCalories(meals) {
-  var total = 0;
-  var i;
-  for (i = 0; i < meals.length; i++) {
-    total = total + meals[i].total_kcal;
-  }
-  return total + " kcal";
+const mealsTotalKcalSum = (meals) => {
+  return meals.reduce((prev, current) => prev + current.total_kcal, 0)
 }
 
 function getMealNameAsTime(mealDatetimeStr) {
@@ -150,11 +147,13 @@ const Day = ({ day }) => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader
-        title={getCardSubtitleAsCalories(meals)}
-        subheader={humanizeByDayOffset(day)}
-      />
       <CardContent>
+      <Typography className={classes.date} variant="subtitle1">
+      {humanizeByDayOffset(day)}
+        </Typography>
+        <Typography className={classes.totalCalories} variant="h4">
+        {mealsTotalKcalSum(meals) + " kcal"}
+        </Typography>
         <MealTable></MealTable>
       </CardContent>
     </Card>

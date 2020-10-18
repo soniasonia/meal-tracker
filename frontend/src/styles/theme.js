@@ -72,8 +72,45 @@ const useDayStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
+  totalCalories: {
+    lineHeight: 2,
+    fontWeight: "bold",
+    textAlign: "right",
+  },
+  date: {
+    color: theme.palette.primary.dark,
+  }
 }));
 
+
+const useAppStyles = makeStyles((theme) => ({
+  backgroundImage: {
+    backgroundImage: `url("peas.jpg")`,
+    backgroundSize: "cover",
+    position: "fixed",
+    top: "0",
+    left: "0",
+    minWidth: "100%",
+    minHeight: "100%",
+  },
+  root: {
+    width: "675px",
+    position: "relative",
+    margin: "0 auto",
+    paddingTop: "15%",
+  },
+  mealContainer: {
+    padding: 30,
+  },  
+  daySelection: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+  }
+}));
 
 const useFormStyles = makeStyles((theme) => ({
     button: {
@@ -97,7 +134,7 @@ const useFormStyles = makeStyles((theme) => ({
         borderColor: '#e0b4b4',
         border: "1px solid",
         borderRadius: "5px",
-        fontSize: "1rem",
+        fontSize: "0.85rem",
         position: "relative",
         marginTop: "1em",
         fontWeight: 700,
@@ -139,4 +176,4 @@ const useFormStyles = makeStyles((theme) => ({
   }));
   
 
-export {theme, useHeaderStyles, useFormStyles, useDayStyles };
+export {theme, useHeaderStyles, useFormStyles, useDayStyles, useAppStyles};

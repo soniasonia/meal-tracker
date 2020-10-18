@@ -37,14 +37,9 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
           Authorization: `Token ${getBackendAuthToken()}`,
         },
       });
-      console.log("getIngredients api response", {
-        url,
-        data: response.data,
-      }); // TODO: DELETE LOGS
       setBackendAnswered(true);
       setOptions(response.data);
     } catch (error) {
-      console.log(error);
       setOptions([]);
     }
   }

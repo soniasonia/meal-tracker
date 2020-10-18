@@ -11,10 +11,11 @@ import {
   deleteBackendAuthToken,
   isBackendAuthTokenValid,
 } from "./session/localStorage";
-
+import {useAppStyles } from "./styles/theme";
 
 const App = () => {
   const [authorized, setAuthorized] = useState(false);
+  const classes = useAppStyles();
 
   // If we have valid token, authorize user.
   useEffect(() => {
@@ -75,26 +76,8 @@ const App = () => {
         <Dashboard user={{ name: authorized }} onLogoutHook={logout} />
       ) : (
         <React.Fragment>
-          <img
-            style={{
-              backgroundImage: `url("peas.jpg")`,
-              backgroundSize: "cover",
-              position: "fixed",
-              top: "0",
-              left: "0",
-              minWidth: "100%",
-              minHeight: "100%",
-            }}
-            alt=""
-          />
-          <div
-            style={{
-              width: "675px",
-              position: "relative",
-              margin: "0 auto",
-              paddingTop: "15%",
-            }}
-          >
+          <img className={classes.backgroundImage} alt="Background image of peas"/>
+          <div className={classes.root}>
             <LoginAndSignupForm onLoginHook={authorize} />
           </div>
         </React.Fragment>

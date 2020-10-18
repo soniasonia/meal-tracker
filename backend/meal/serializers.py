@@ -58,7 +58,7 @@ class MealSerializerCreate(serializers.ModelSerializer):
         Check that meal is not empty
         """
         if not attrs['meal_ingredients']:
-            raise serializers.ValidationError("Meal cannot be empty")
+            raise serializers.ValidationError("Meal needs at least one ingredient")
         return attrs
 
     def create(self, validated_data):
