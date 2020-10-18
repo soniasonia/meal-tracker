@@ -5,8 +5,10 @@ import { TrendingUpOutlined } from '@material-ui/icons';
 
 const theme = createMuiTheme({
     palette: {
-      default: {
-        main: '#829191'
+      gray: {
+        light: '#f5f5f5',
+        main: '#e0e0e0',
+        dark: '#757575',
       },    
       primary: {
         main: '#9BC53D',
@@ -26,7 +28,6 @@ const theme = createMuiTheme({
       success: {
         main: '#568259',
       },
-      padding: 10,
     },
   });
 
@@ -36,13 +37,43 @@ const useHeaderStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
     menuButton: {
-      marginRight: theme.spacing(2),
-      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+      '&:hover':{
+        backgroundColor: theme.palette.secondary.dark,
+      } 
+
     },
     title: {
       flexGrow: 1,
     },
   }));
+
+const useDayStyles = makeStyles((theme) => ({
+  card: {
+    maxWidth: 345,
+    minWidth: 295,
+    minHeight: 190,
+    display: "inline-block",
+    margin: 10,
+    backgroundColor: theme.palette.gray.main,
+  },
+  table: {
+    "& > *": {
+      borderBottom: "unset",
+    },
+  },
+  detailRow:
+  {
+    backgroundColor: theme.palette.gray.light,
+  },
+  media: {
+    height: 0,
+    paddingTop: "56.25%", // 16:9
+  },
+}));
+
 
 const useFormStyles = makeStyles((theme) => ({
     button: {
@@ -72,8 +103,8 @@ const useFormStyles = makeStyles((theme) => ({
         fontWeight: 700,
         display: "inline-block",
         padding: ".5833em .833em",
-        lineHeight: 1, 
-        textAlign: "center",       
+        lineHeight: 2, 
+        width: "80%",
       },
      
     fieldError: {
@@ -108,4 +139,4 @@ const useFormStyles = makeStyles((theme) => ({
   }));
   
 
-export {theme, useHeaderStyles, useFormStyles};
+export {theme, useHeaderStyles, useFormStyles, useDayStyles };

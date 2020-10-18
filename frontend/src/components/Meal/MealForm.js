@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -45,6 +45,10 @@ const MealForm = () => {
   const handleFormClose = () => {
     setFormOpened(false);
   };
+
+  useEffect(() => {
+    setError(false);
+  }, [formOpened]); // Remove error message when closing form
 
   const handleFormSubmit = () => {
     async function createMeal() {
@@ -120,14 +124,14 @@ const MealForm = () => {
             </form>
             <br></br>
             {error && error.non_field_errors ? (
-              <div className={formClasses.error}>
+              <center><div className={formClasses.error}>
                 {error.non_field_errors}
-              </div>
+              </div></center>
             ) : null}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleFormClose} color="primary">
+          <Button autoFocus onClick={handleFormClose} color="secondary">
             Cancel
           </Button>
           <Button onClick={handleFormSubmit} color="primary">

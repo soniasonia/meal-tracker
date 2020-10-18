@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { DateTime } from "luxon";
 import { APP_URL } from "../../config";
-import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,28 +17,7 @@ import CardContent from "@material-ui/core/CardContent";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { getBackendAuthToken } from "../../session/localStorage";
-
-const useRowStyles = makeStyles({
-  root: {
-    "& > *": {
-      borderBottom: "unset",
-    },
-  },
-});
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-    minWidth: 280,
-    minHeight: 190,
-    display: "inline-block",
-    margin: 10,
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-}));
+import { useDayStyles } from "../../styles/theme";
 
 function getCardSubtitleAsCalories(meals) {
   var total = 0;
@@ -76,7 +54,7 @@ const humanizeByDayOffset = (offset) =>
 
 const Day = ({ day }) => {
   const [meals, setMeals] = useState([]);
-  const classes = useStyles();
+  const classes = useDayStyles();
 
   useEffect(() => {
     async function fetchMeals() {
@@ -113,15 +91,16 @@ const Day = ({ day }) => {
 
   function Row({ name, total_kcal, ingredients }) {
     const [open, setOpen] = React.useState(false);
-    const classes = useRowStyles();
+    const classes = useDayStyles();
 
     return (
       <React.Fragment>
-        <TableRow className={classes.root}>
+        <TableRow className={classes.table}>
           <TableCell>
             <IconButton
               aria-label="expand row"
               size="small"
+              color="secondary"
               onClick={() => setOpen(!open)}
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -135,7 +114,8 @@ const Day = ({ day }) => {
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}
+        className={classes.detailRow}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box margin={1}>
                 <Table size="small" aria-label="purchases">
@@ -169,7 +149,7 @@ const Day = ({ day }) => {
   }
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.card}>
       <CardHeader
         title={getCardSubtitleAsCalories(meals)}
         subheader={humanizeByDayOffset(day)}

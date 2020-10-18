@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { IngredientForm } from "./Ingredient/IngredientForm";
 import { MealForm } from "./Meal/MealForm";
-import {theme, useHeaderStyles} from "../styles/theme";
-import { ThemeProvider } from '@material-ui/styles';
+import { useHeaderStyles} from "../styles/theme";
+
 
 const Header = ({ user, logoutAction }) => {
   const classes = useHeaderStyles();
@@ -22,7 +22,6 @@ const Header = ({ user, logoutAction }) => {
   };
 
   return (
-  <ThemeProvider theme={theme}>
   <AppBar position="static" color="primary">
     <Toolbar> 
       <Typography variant="h6" className={classes.title}>
@@ -38,7 +37,6 @@ const Header = ({ user, logoutAction }) => {
       </Button>
     </Toolbar>
   </AppBar>
-  </ThemeProvider>
   )
 }
 

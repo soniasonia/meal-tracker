@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { errorStyle } from "./_styles"
+import {useFormStyles} from "../../styles/theme";
+
 
 const LoginForm = ({ url, authorizeTokenAction }) => {
   const [ formData, setFormData ] = useState({ login: "", password: "" });
   const [ error, setError ] = useState(false);
+
+  const formClasses = useFormStyles();
 
   const submit = async event => {
     event.preventDefault();
@@ -44,7 +47,7 @@ const LoginForm = ({ url, authorizeTokenAction }) => {
             onChange={(e) => setFormData({ ...formData, login: e.target.value })}
           />
           {error && error.username ? (
-            <div className="ui pointing basic label" style={errorStyle}>
+            <div className={formClasses.fieldError}>
               {error.username}
             </div>
           ) : null}
@@ -57,14 +60,14 @@ const LoginForm = ({ url, authorizeTokenAction }) => {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
           {error.password ? (
-            <div className="ui pointing basic label" style={errorStyle}>
+            <div className={formClasses.fieldError}>
               {error.password}
             </div>
           ) : null}
         </div>
 
         {error.non_field_errors ? (
-          <div className="ui negative message" style={errorStyle}>
+          <div className={formClasses.error}>
             { error.non_field_errors }
           </div>
         ) : null}

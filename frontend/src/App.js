@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { ThemeProvider } from '@material-ui/styles';
 import { APP_URL } from "./config";
 import { Dashboard } from "./components/Dashboard";
 import { LoginAndSignupForm } from "./components/Auth/LoginAndSignupForm";
+import {theme } from "./styles/theme";
 import {
   setBackendAuthToken,
   getBackendAuthToken,
   deleteBackendAuthToken,
   isBackendAuthTokenValid,
 } from "./session/localStorage";
+
 
 const App = () => {
   const [authorized, setAuthorized] = useState(false);
@@ -66,7 +69,8 @@ const App = () => {
   };
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+    <div className="App">      
       {authorized ? (
         <Dashboard user={{ name: authorized }} onLogoutHook={logout} />
       ) : (
@@ -96,6 +100,7 @@ const App = () => {
         </React.Fragment>
       )}
     </div>
+    </ThemeProvider>
   );
 };
 

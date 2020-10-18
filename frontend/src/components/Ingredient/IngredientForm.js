@@ -10,7 +10,6 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
-import { errorStyle } from "../Auth/_styles";
 import {useHeaderStyles, useFormStyles} from "../../styles/theme";
 
 
@@ -33,7 +32,7 @@ const IngredientForm = () => {
 
   useEffect(() => {
     setError(false);
-  }, [formOpened]); // Run effect again when 'formOpened' is changed
+  }, [formOpened]); // Remove error message when closing form
 
   const onFormSubmit = (event) => {
     event.preventDefault();
@@ -114,14 +113,14 @@ const IngredientForm = () => {
             </form>
             <br></br>
             {error && error.non_field_errors ? (
-              <div className={formClasses.error}>
-                {error.non_field_errors}
-              </div>
+              <center><div className={formClasses.error}>
+                {error.non_field_errors}            
+              </div></center>
             ) : null}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleFormClose} color="primary">
+          <Button autoFocus onClick={handleFormClose} color="secondary">
             Cancel
           </Button>
           <Button onClick={(event) => onFormSubmit(event)} color="primary">
