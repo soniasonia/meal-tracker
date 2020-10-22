@@ -93,7 +93,7 @@ class IngredientViewSet(viewsets.GenericViewSet,
         by filtering against a 'startswith' query parameter in the URL.
         """
         queryset = models.Ingredient.objects.all()
-        starts_with = self.request.query_params.get('startswith', None)
+        starts_with = self.request.query_params.get('contains', None)
         if starts_with is not None:
-            queryset = queryset.filter(name__startswith=starts_with)
+            queryset = queryset.filter(name__contains=starts_with)
         return queryset

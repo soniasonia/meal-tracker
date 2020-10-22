@@ -12,7 +12,7 @@ const getIngredientsEndpoint = searchPhrase => {
   if (searchPhrase === "") {
     return `${APP_URL}/api/ingredient/`;
   }
-  return `${APP_URL}/api/ingredient/?startswith=${searchPhrase}`;
+  return `${APP_URL}/api/ingredient/?contains=${searchPhrase}`;
 };
 
 const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
