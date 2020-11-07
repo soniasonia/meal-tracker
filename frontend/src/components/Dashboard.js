@@ -2,12 +2,21 @@ import React from "react";
 import { Header } from './Header';
 import { MealContainer } from "./Meal/MealContainer" ;
 
-const Dashboard = ({ user, onLogoutHook }) => (
-  <div>
-    <Header user={user} logoutAction={onLogoutHook}/>
+const Dashboard = ({ user, onLogoutHook }) => {
+
+  const [handler, setHandler] =  React.useState(0);
+  
+  const refreshDashboard = () => {
+    setHandler(handler + 1);
+  };
+
+  return (<div>
+    <Header user={user} 
+      logoutAction={onLogoutHook} 
+      handler={refreshDashboard}/>
     <MealContainer />
-  </div>
-  )
+  </div>)
+}
 
 export {
   Dashboard

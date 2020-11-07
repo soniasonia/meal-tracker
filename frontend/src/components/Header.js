@@ -8,18 +8,8 @@ import { MealForm } from "./Meal/MealForm";
 import { useHeaderStyles} from "../styles/theme";
 
 
-const Header = ({ user, logoutAction }) => {
+const Header = ({ user, logoutAction, refreshDashboard }) => {
   const classes = useHeaderStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
   <AppBar position="static" color="primary">
@@ -28,7 +18,7 @@ const Header = ({ user, logoutAction }) => {
         Welcome to your meal tracker {user.name}!
       </Typography>
       <IngredientForm />  
-      <MealForm />
+      <MealForm handler={refreshDashboard}/>
       <Button 
         variant="contained" 
         className={classes.menuButton}

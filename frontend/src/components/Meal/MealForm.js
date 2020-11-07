@@ -9,7 +9,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import ColorizeIcon from "@material-ui/icons/Colorize";
 
 import axios from "axios";
 import { APP_URL } from "../../config";
@@ -17,12 +16,14 @@ import { IngredientRow } from "./IngredientRow";
 import { getBackendAuthToken } from "../../session/localStorage";
 import {useHeaderStyles, useFormStyles} from "../../styles/theme";
 
-const MealForm = () => {
+const generateRange = from => Array.from(Array(from).keys());
+
+const MealForm = ({refreshDashboard}) => {
   const [formOpened, setFormOpened] = React.useState(false);
   const [ingredients, setIngredients] = React.useState([]);
   const [error, setError] = React.useState(false);
+  const [ingredientRows, setIngredientRows] = React.useState(generateRange(2));
 
-  const maxIngredients = 2;
   const headerClasses = useHeaderStyles();
   const formClasses = useFormStyles();
 
@@ -44,11 +45,8 @@ const MealForm = () => {
 
   const handleFormClose = () => {
     setFormOpened(false);
-  };
-
-  useEffect(() => {
     setError(false);
-  }, [formOpened]); // Remove error message when closing form
+  };
 
   const handleFormSubmit = () => {
     async function createMeal() {
@@ -79,11 +77,13 @@ const MealForm = () => {
         return;
       }
       setError(false);
+      refreshDashboard();
       handleFormClose();
     }
     createMeal();
   };
 
+  
   return (
     <React.Fragment>
       <Button 
@@ -99,25 +99,19 @@ const MealForm = () => {
         <DialogContent>
           <DialogContentText>
             <form className={formClasses.formRoot} noValidate autoComplete="off">
-              {/* TODO: Loop over maxIngredients and yield IngredientRow, use value as index */}
-              <IngredientRow
-                addIngredientToForm={pushNewIngredient}
-                index={0}
-              ></IngredientRow>
-              <IngredientRow
-                addIngredientToForm={pushNewIngredient}
-                index={1}
-              ></IngredientRow>
+              {
+                ingredientRows.map( i => (
+                  <IngredientRow
+                  addIngredientToForm={pushNewIngredient}
+                  index={i}
+                ></IngredientRow>
+                ))                
+              }
               <div>
                 <Tooltip title="New Ingredient">
                   <IconButton aria-label="new-ingredient">
-                    <AddCircleIcon />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Pick Existing Ingredient">
-                  <IconButton aria-label="existing-ingredient">
-                    <ColorizeIcon />
+                    <AddCircleIcon
+                    onClick={() => setIngredientRows(generateRange(ingredientRows.length + 1))} />
                   </IconButton>
                 </Tooltip>
               </div>
