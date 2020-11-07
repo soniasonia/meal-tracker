@@ -82,7 +82,6 @@ const useDayStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const useAppStyles = makeStyles((theme) => ({
   backgroundImage: {
     backgroundImage: `url("peas.jpg")`,
@@ -128,7 +127,7 @@ const useFormStyles = makeStyles((theme) => ({
       height: 0,
       paddingTop: "56.25%", // 16:9
     },
-    error:{
+    lastError:{
         backgroundColor: "#FFF6F6",
         color: theme.palette.error.dark,
         borderColor: '#E0B4B4',
@@ -136,12 +135,16 @@ const useFormStyles = makeStyles((theme) => ({
         borderRadius: "5px",
         fontSize: "0.85rem",
         position: "relative",
-        marginTop: "1em",
+        marginTop: "1em",        
+        marginBottom: "2em",
+        marginLeft: "2.2em",        
+        marginRight: "1em",
         fontWeight: 700,
         display: "inline-block",
         padding: ".5833em .833em",
         lineHeight: 2, 
         width: "80%",
+        textAlign: "center",
       },
      
     fieldError: {

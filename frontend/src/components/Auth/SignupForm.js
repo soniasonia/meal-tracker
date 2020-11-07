@@ -72,9 +72,9 @@ const SignupForm = ({ url }) => {
           </div>
 
           {error.non_field_errors ? (
-          <center><div className={formClasses.error}>
+          <div className={formClasses.lastError}>
             { error.non_field_errors }
-          </div><br></br><br></br></center>
+          </div>
         ) : null}
 
           <button type="submit" className="ui button">
