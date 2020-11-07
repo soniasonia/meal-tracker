@@ -6,8 +6,8 @@ import { TrendingUpOutlined } from '@material-ui/icons';
 const theme = createMuiTheme({
     palette: {
       gray: {
-        light: '#f5f5f5',
-        main: '#e0e0e0',
+        light: '#F5F5F5',
+        main: '#E0E0E0',
         dark: '#757575',
       },    
       primary: {
@@ -129,9 +129,9 @@ const useFormStyles = makeStyles((theme) => ({
       paddingTop: "56.25%", // 16:9
     },
     error:{
-        backgroundColor: "#fff6f6",
+        backgroundColor: "#FFF6F6",
         color: theme.palette.error.dark,
-        borderColor: '#e0b4b4',
+        borderColor: '#E0B4B4',
         border: "1px solid",
         borderRadius: "5px",
         fontSize: "0.85rem",
@@ -145,9 +145,9 @@ const useFormStyles = makeStyles((theme) => ({
       },
      
     fieldError: {
-        backgroundColor: "#fff6f6",
+        backgroundColor: "#FFF6F6",
         color: theme.palette.error.dark,
-        borderColor: '#e0b4b4',
+        borderColor: '#E0B4B4',
         border: "1px solid",
         borderRadius: "5px",
         fontSize: "0.85rem",
@@ -166,8 +166,8 @@ const useFormStyles = makeStyles((theme) => ({
             width: ".6666em",
             height: ".6666em",
             marginTop: "-1px",
-            backgroundColor: "#fff6f6",
-            borderColor: '#e0b4b4',
+            backgroundColor: "#FFF6F6",
+            borderColor: '#E0B4B4',
             border: "1px solid",
             borderRight: 0,
             borderBottom: 0,

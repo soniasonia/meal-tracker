@@ -16,7 +16,6 @@ const getIngredientsEndpoint = searchPhrase => {
 };
 
 const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
-  // const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [searchName, setSearchName] = React.useState("");
@@ -24,7 +23,7 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
   const [selectedIngridient, setSelectedIngridient] = React.useState({
     id: null,
     name: "",
-    kcal_per_100g: 0,
+    kcalPer100g: 0,
     weight: 0,
   });
 
@@ -55,7 +54,7 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
     if (loading) {
       getIngredients("");
     }
-  }, [open]); // Run effect again when 'open' is changed
+  }, [open]);
 
   useEffect(() => {
     setBackendAnswered(false);
@@ -66,13 +65,13 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
     if (searchName !== "") {
       debouncedGetIngredients(searchName);
     }
-  }, [searchName]); // Run effect again when 'searchName' is changed
-
+  }, [searchName]);
+  
   useEffect(() => {
     if (selectedIngridient.id !== null && selectedIngridient.weight > 0) {
       addIngredientToForm(index, selectedIngridient);
     }
-  }, [selectedIngridient]) // Run effect again when 'selectedIngridient' is changed
+  }, [selectedIngridient]);
 
   return (
     <div>
@@ -92,7 +91,7 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) =>
-          option.name + " (" + option.kcal_per_100g + ")"
+          option.name + " (" + option.kcalPer100g + ")"
         }
         options={options}
         loading={loading}

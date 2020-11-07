@@ -6,19 +6,20 @@ import { Day } from "./Day";
 import { TRACKED_DAYS_THRESHOLD } from "../../config"
 import { useAppStyles }  from "../../styles/theme";
 
+const generateRange = from => Array.from(Array(from).keys());
 
 const MealContainer = () => {
   const classes = useAppStyles();
-  const range = Array.from(Array(TRACKED_DAYS_THRESHOLD).keys());
   const [daysThreshold, setDaysThreshold] =  React.useState(TRACKED_DAYS_THRESHOLD);
-  const [daysOffset, setDaysOffset] = React.useState(range);
+  const [daysOffset, setDaysOffset] = React.useState(generateRange(TRACKED_DAYS_THRESHOLD));
 
   useEffect(() => {
     setDaysOffset(Array.from(Array(daysThreshold).keys()));
   }, [daysThreshold]); 
 
   const handleChange = (numb) => {
-    setDaysThreshold(numb);
+    setDaysThreshold(numb)
+    setDaysOffset(generateRange(numb));
   }
 
   return (

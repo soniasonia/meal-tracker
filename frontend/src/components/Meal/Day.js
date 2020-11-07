@@ -21,9 +21,7 @@ import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
 import { useDayStyles } from "../../styles/theme";
 
-const mealsTotalKcalSum = (meals) => {
-  return meals.reduce((prev, current) => prev + current.total_kcal, 0)
-}
+const mealsTotalKcalSum = meals => meals.reduce((prev, current) => prev + current.total_kcal, 0)
 
 function getMealNameAsTime(mealDatetimeStr) {
   var hour = Number(mealDatetimeStr.substr(11, 2));
