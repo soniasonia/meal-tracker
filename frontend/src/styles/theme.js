@@ -92,7 +92,7 @@ const useAppStyles = makeStyles((theme) => ({
     minWidth: "100%",
     minHeight: "100%",
   },
-  root: {
+  loginAndSignup: {
     width: "675px",
     position: "relative",
     margin: "0 auto",

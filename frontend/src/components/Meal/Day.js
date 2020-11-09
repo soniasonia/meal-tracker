@@ -11,7 +11,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -24,18 +23,18 @@ import { useDayStyles } from "../../styles/theme";
 const mealsTotalKcalSum = meals => meals.reduce((prev, current) => prev + current.total_kcal, 0)
 
 function getMealNameAsTime(mealDatetimeStr) {
-  var hour = Number(mealDatetimeStr.substr(11, 2));
-  var hourStr = mealDatetimeStr.substr(11, 5);
-  if (hour < 10) {
+  const mealDate = DateTime.fromISO(mealDatetimeStr);
+  const hourStr = mealDate.toLocaleString(DateTime.TIME_24_SIMPLE)
+  if (mealDate.hour < 10) {
     return "Breakfast at " + hourStr;
   }
-  if (hour < 14) {
-    return "Lunch at " + hourStr;
+  if (mealDate.hour < 14) {
+    return "Lunch at " + hourStr; 
   }
-  if (hour < 17) {
+  if (mealDate.hour < 17) {
     return "Dinner at " + hourStr;
   }
-  if (hour < 21) {
+  if (mealDate.hour < 21) {
     return "Supper at " + hourStr;
   }
   return "Night snack :( at " + hourStr;

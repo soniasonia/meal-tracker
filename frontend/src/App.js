@@ -77,7 +77,7 @@ const App = () => {
       ) : (
         <React.Fragment>
           <img className={classes.backgroundImage} alt="Background image of peas"/>
-          <div className={classes.root}>
+          <div className={classes.loginAndSignup}>
             <LoginAndSignupForm onLoginHook={authorize} />
           </div>
         </React.Fragment>
