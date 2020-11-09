@@ -8,19 +8,19 @@ import useConstant from "use-constant";
 import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
 
-const getIngredientsEndpoint = searchPhrase => {
+const getIngredientsEndpoint = (searchPhrase) => {
   if (searchPhrase === "") {
     return `${APP_URL}/api/ingredient/`;
   }
   return `${APP_URL}/api/ingredient/?contains=${searchPhrase}`;
 };
 
-const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
+const IngredientRow = ({ addIngredientToForm, key = 0 }) => {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [searchName, setSearchName] = React.useState("");
   const [backendAnswered, setBackendAnswered] = React.useState(false);
-  const [selectedIngridient, setSelectedIngridient] = React.useState({
+  const [selectedIngredient, setselectedIngredient] = React.useState({
     id: null,
     name: "",
     kcalPer100g: 0,
@@ -42,11 +42,6 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
       setOptions([]);
     }
   }
-  
-  // Debounce the original search async function
-  const debouncedGetIngredients = useConstant(() =>
-    AwesomeDebouncePromise(getIngredients, 1000)
-  );
 
   const loading = open && options.length === 0 && !backendAnswered;
 
@@ -54,24 +49,33 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
     if (loading) {
       getIngredients("");
     }
-  }, [open]);
+  }, [open, loading]);
+
+
+  // Debounce the original search async function
+  const debouncedGetIngredients = useConstant(() =>
+    AwesomeDebouncePromise(getIngredients, 1000)
+  );
 
   useEffect(() => {
-    setBackendAnswered(false);
-    // Get intredients when user removes every character.
-    if (open && searchName === "") {
+
+    async function getIngredientsWhenInputEmpty() {
       getIngredients("");
+    }
+    setBackendAnswered(false);
+    if (open && searchName === "") {
+      getIngredientsWhenInputEmpty();
     }
     if (searchName !== "") {
       debouncedGetIngredients(searchName);
     }
-  }, [searchName]);
-  
+  }, [open, searchName, debouncedGetIngredients]);
+
   useEffect(() => {
-    if (selectedIngridient.id !== null && selectedIngridient.weight > 0) {
-      addIngredientToForm(index, selectedIngridient);
+    if (selectedIngredient.id !== null && selectedIngredient.weight > 0) {
+      addIngredientToForm(key, selectedIngredient);
     }
-  }, [selectedIngridient]);
+  }, [selectedIngredient, addIngredientToForm, key]);
 
   return (
     <div>
@@ -86,8 +90,8 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
           setOpen(false);
         }}
         onChange={(e, v) => {
-          // Deconstruct current selectedIngridient to keep default values from initial state.
-          setSelectedIngridient({ ...selectedIngridient, ...v });
+          // Deconstruct current selectedIngredient to keep default values from initial state.
+          setselectedIngredient({ ...selectedIngredient, ...v });
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) =>
@@ -118,10 +122,10 @@ const IngredientRow = ({ addIngredientToForm, index = 0 }) => {
 
       <TextField
         label="Weight (in grams)"
-        value={selectedIngridient.weight}
+        value={selectedIngredient.weight}
         onChange={(e) =>
-          setSelectedIngridient({
-            ...selectedIngridient,
+          setselectedIngredient({
+            ...selectedIngredient,
             weight: Number(e.target.value),
           })
         }

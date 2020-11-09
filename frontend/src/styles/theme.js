@@ -1,7 +1,6 @@
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { TrendingUpOutlined } from '@material-ui/icons';
 
 const theme = createMuiTheme({
     palette: {

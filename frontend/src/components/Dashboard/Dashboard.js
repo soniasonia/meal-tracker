@@ -1,6 +1,6 @@
 import React from "react";
-import { Header } from './Header';
-import { MealContainer } from "./Meal/MealContainer" ;
+import { Header } from "../Header/Header";
+import { MealContainer } from "./MealContainer" ;
 
 const Dashboard = ({ user, onLogoutHook }) => {
 

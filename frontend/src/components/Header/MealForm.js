@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -55,7 +55,7 @@ const MealForm = ({refreshDashboard}) => {
         weight: i.weight,
       }));
       try {
-        const response = await axios.post(
+        await axios.post(
           APP_URL + "/api/meal/",
           { meal_ingredients: ingredientList },
           {
@@ -103,7 +103,7 @@ const MealForm = ({refreshDashboard}) => {
                 ingredientRows.map( i => (
                   <IngredientRow
                   addIngredientToForm={pushNewIngredient}
-                  index={i}
+                  key={i}
                 ></IngredientRow>
                 ))                
               }

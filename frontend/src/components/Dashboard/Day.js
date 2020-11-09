@@ -63,7 +63,7 @@ const Day = ({ day }) => {
       setMeals(response.data);
     }
     fetchMeals();
-  }, []);
+  }, [day]);
 
   function IngredientDetails(item) {
     const key = item.ingredient.id;

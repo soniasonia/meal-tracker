@@ -27,18 +27,15 @@ const IngredientForm = () => {
   };
 
   const handleFormClose = () => {
+    setError(false);
     setFormOpened(false);
   };
-
-  useEffect(() => {
-    setError(false);
-  }, [formOpened]); // Remove error message when closing form
 
   const onFormSubmit = (event) => {
     event.preventDefault();
     async function createIngredient() {
       try {
-        const response = await axios.post(
+        await axios.post(
           APP_URL + "/api/ingredient/",
           {
             name: name,
@@ -78,11 +75,8 @@ const IngredientForm = () => {
       </Button>
 
       <Dialog maxWidth="md" open={formOpened} onClose={handleFormClose}>
-        <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Add new ingredient
-        </DialogTitle>
+      <DialogTitle id="form-dialog-title">Add new ingredient</DialogTitle>
         <DialogContent>
-          <DialogContentText>
             <form className={formClasses.formRoot}>
               <TextField id="standard-basic" 
                 label="Name"
@@ -111,13 +105,11 @@ const IngredientForm = () => {
                 </div>
               ) : null}
             </form>
-            <br></br>
             {error && error.non_field_errors ? (
-              <center><div className={formClasses.error}>
+              <center><div className={formClasses.lastError}>
                 {error.non_field_errors}            
               </div></center>
             ) : null}
-          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleFormClose} color="secondary">
