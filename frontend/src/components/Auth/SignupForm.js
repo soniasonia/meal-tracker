@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { errorStyle } from "./_styles"
+import {useFormStyles} from "../../styles/theme";
 
-const CreateUserForm = ({ url }) => {
+const SignupForm = ({ url }) => {
   const [ formData, setFormData ] = useState({ login: "", password: "", email: "" });
   const [ formResponse, setFormResponse ] = useState({ created: false });
   const [ error, setError ] = useState(false);
+
+  const formClasses = useFormStyles();
 
   const submit = async event => {
     event.preventDefault();
@@ -50,7 +52,7 @@ const CreateUserForm = ({ url }) => {
               onChange={(e) => setFormData({ ...formData, login: e.target.value })}
             />
             {error.username ? (
-              <div className="ui pointing basic label" style={errorStyle}>
+              <div className={formClasses.fieldError}>
                 {error.username}
               </div>
             ) : null}
@@ -63,17 +65,17 @@ const CreateUserForm = ({ url }) => {
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
             {error.password ? (
-              <div className="ui pointing basic label" style={errorStyle}>
+              <div className={formClasses.fieldError}>
                 {error.password}
               </div>
             ) : null}
           </div>
 
           {error.non_field_errors ? (
-            <div className="ui negative message" style={errorStyle}>
-              {error.non_field_errors}
-            </div>
-          ) : null}
+          <div className={formClasses.lastError}>
+            { error.non_field_errors }
+          </div>
+        ) : null}
 
           <button type="submit" className="ui button">
             Submit
@@ -84,4 +86,4 @@ const CreateUserForm = ({ url }) => {
   );
 }
 
-export default CreateUserForm;
+export default SignupForm;

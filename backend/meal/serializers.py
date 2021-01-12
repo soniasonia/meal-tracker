@@ -31,6 +31,8 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class MealIngredientSerializer(serializers.ModelSerializer):
+    ingredient = IngredientSerializer()
+
     class Meta:
         model = models.MealIngredient
         kcal = serializers.ReadOnlyField()
@@ -50,6 +52,14 @@ class MealSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Meal
         fields = ("meal_ingredients",)
+
+    def validate(self, attrs):
+        """
+        Check that meal is not empty
+        """
+        if not attrs['meal_ingredients']:
+            raise serializers.ValidationError("Meal needs at least one ingredient")
+        return attrs
 
     def create(self, validated_data):
         ingredient_data = validated_data.pop('meal_ingredients')
