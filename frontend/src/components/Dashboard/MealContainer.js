@@ -24,7 +24,6 @@ const MealContainer = () => {
 
   return (
     <div className={classes.mealContainer}>
-      
       <div className={classes.daySelection}>Showing the last  
           <ButtonGroup size="large" >
               <Button 

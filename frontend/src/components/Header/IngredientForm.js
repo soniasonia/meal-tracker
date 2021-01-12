@@ -12,7 +12,6 @@ import { APP_URL } from "../../config";
 import { getBackendAuthToken } from "../../session/localStorage";
 import {useHeaderStyles, useFormStyles} from "../../styles/theme";
 
-
 const IngredientForm = () => {
   const [name, setName] = React.useState("");
   const [kcalPer100, setKcalPer100] = React.useState("");

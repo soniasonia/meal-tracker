@@ -58,7 +58,6 @@ const IngredientRow = ({ addIngredientToForm, key = 0 }) => {
   );
 
   useEffect(() => {
-
     async function getIngredientsWhenInputEmpty() {
       getIngredients("");
     }
