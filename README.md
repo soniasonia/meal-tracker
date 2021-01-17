@@ -14,6 +14,7 @@ This project uses Travis CI to automatically test code changes with every git pu
 - runs flake8 for checking code syntax of **backend** against PEP 8 (Style Guide for Python Code)
 
 ## Run for development
+### Backend
 1. Create Python virtual env and install the requirements
     - example for Linux
     ```
@@ -33,8 +34,22 @@ This project uses Travis CI to automatically test code changes with every git pu
    DB_PASS=supersecretpassword
    SECRET_KEY=12345
    ```
-4. Run application
+4. Run server
    ```
    python manage.py migrate
    python manage.py runserver
    ```
+### Frontend
+1. Install Node JS
+      - example for Linux and virtualenv
+   ```
+   pip install nodeenv
+   nodeenv nenv
+   source nenv/bin/activate
+   ```
+2. Run app in the dev mode
+   
+   ```
+   npm start
+   ```
+3. Open http://localhost:3000 to view it in the browser
