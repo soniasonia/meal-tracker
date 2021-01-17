@@ -71,6 +71,7 @@ const Day = ({ day }) => {
     const weight = item.weight;
     const kcal_per_100g = item.ingredient.kcal_per_100g;
     const kcal = item.kcal;
+    
     return (
       <TableRow key={key}>
         <TableCell>
